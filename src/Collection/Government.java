@@ -1,0 +1,29 @@
+package Collection;
+
+import Exceptions.InvalidValueException;
+
+public enum Government {
+    MATRIARCHY(0),
+    MERITOCRACY(1),
+    NOOCRACY(2),
+    PLUTOCRACY(3);
+
+    private int id;
+
+    Government(int id){
+        this.id = id;
+    }
+
+    public static Government byOrdinal(int s) {
+        for (Government value : Government.values()) {
+            if (value.getId() == s) {
+                return value;
+            }
+        }
+        throw new InvalidValueException("Не найдено, соответствующий строке: " + s);
+    }
+
+    public int getId() {
+        return id;
+    }
+}
