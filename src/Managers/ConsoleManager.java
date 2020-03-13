@@ -93,9 +93,9 @@ public class ConsoleManager {
         String name = readWithMessage("Введите название города: ", false);
         Coordinates coord = getCoord();
         Double area = Double.parseDouble(readWithMessage("Введите площадь (Double): ", false));
-        long population = Long.parseLong(readWithMessageMinMax("Введите кол-во населения (Long): ", new BigDecimal(0), NumUtil.LONG_MAX, true));
+        long population = Long.parseLong(readWithMessageMinMax("Введите кол-во населения (Long, Больше нуля): ", new BigDecimal(0), NumUtil.LONG_MAX, true));
         long metersAboveSeaLevel = Long.parseLong(readWithMessage("Введите высоту над уровнем моря (Long): ", true));
-        double timezone = Double.parseDouble(readWithMessageMinMax("Введите часовой пояс (Double): ", new BigDecimal(-13), new BigDecimal(15), true));
+        double timezone = Double.parseDouble(readWithMessageMinMax("Введите часовой пояс (Double, от -13 до 15): ", new BigDecimal(-13), new BigDecimal(15), true));
         boolean capital = parseBoolean(readWithMessage("Это столица? (true/false): ", true));
         Government government = getGoverment();
         Human human = getHuman();
@@ -110,7 +110,7 @@ public class ConsoleManager {
      */
     public Coordinates getCoord(){
         Float x = Float.parseFloat(readWithMessage("Введите позицию X (Float): ", true));
-        Double y = Double.parseDouble(readWithMessageMinMax("Введите позицию Y (Double): ", new BigDecimal(-587), NumUtil.DOUBLE_MAX, false));
+        Double y = Double.parseDouble(readWithMessageMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587), NumUtil.DOUBLE_MAX, false));
 
         return new Coordinates(x, y);
     }
@@ -137,7 +137,7 @@ public class ConsoleManager {
      * @return
      */
     public Human getHuman(){
-        Integer age = Integer.parseInt(readWithMessageMinMax("Введите возвраст (Integer): ", new BigDecimal(0), NumUtil.INTEGER_MAX, true));
+        Integer age = Integer.parseInt(readWithMessageMinMax("Введите возвраст (Integer, больше нуля): ", new BigDecimal(0), NumUtil.INTEGER_MAX, true));
         return new Human(age);
     }
 
