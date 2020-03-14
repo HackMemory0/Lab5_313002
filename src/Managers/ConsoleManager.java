@@ -72,6 +72,8 @@ public class ConsoleManager {
 
         do {
             output = readWithMessage(message, canNull);
+            if(output == null && canNull)
+                break;
         }while (!NumUtil.isInRange(Double.parseDouble(output), min, max));
 
         return output;
@@ -90,13 +92,71 @@ public class ConsoleManager {
      * @return
      */
     public City getCity(){
+        Double area = 0.0, timezone = 0.0;
+        long population = 0, metersAboveSeaLevel = 0;
+        boolean capital = false;
+
         String name = readWithMessage("Введите название города: ", false);
         Coordinates coord = getCoord();
-        Double area = Double.parseDouble(readWithMessage("Введите площадь (Double): ", false));
-        long population = Long.parseLong(readWithMessageMinMax("Введите кол-во населения (Long, Больше нуля): ", new BigDecimal(0), NumUtil.LONG_MAX, true));
-        long metersAboveSeaLevel = Long.parseLong(readWithMessage("Введите высоту над уровнем моря (Long): ", true));
-        double timezone = Double.parseDouble(readWithMessageMinMax("Введите часовой пояс (Double, от -13 до 15): ", new BigDecimal(-13), new BigDecimal(15), true));
-        boolean capital = parseBoolean(readWithMessage("Это столица? (true/false): ", true));
+
+        while (true) {
+            try {
+                String o = readWithMessage("Введите площадь (Double, любое число): ", false);
+                if (o == null)
+                    break;
+                area = Double.parseDouble(o);
+                break;
+            } catch (NumberFormatException ex) {
+                writeln("Неверный тип данных");
+            }
+        }
+
+        while (true) {
+            try {
+                String o = readWithMessageMinMax("Введите кол-во населения (Long, Больше нуля): ", new BigDecimal(0), NumUtil.LONG_MAX, true);
+                if(o == null)
+                    break;
+                population = Long.parseLong(o);
+                break;
+            }catch(NumberFormatException ex){
+                writeln("Неверный тип данных");
+            }
+        }
+
+        while (true) {
+            try {
+                String o = readWithMessage("Введите высоту над уровнем моря (Long): ", true);
+                if(o == null)
+                    break;
+                metersAboveSeaLevel = Long.parseLong(o);
+                break;
+            }catch(NumberFormatException ex){
+                writeln("Неверный тип данных");
+            }
+        }
+
+        while (true) {
+            try {
+                String o = readWithMessageMinMax("Введите часовой пояс (Double, от -13 до 15): ", new BigDecimal(-13), new BigDecimal(15), true);
+                if(o == null)
+                    break;
+                timezone = Double.parseDouble(o);
+                break;
+            }catch(NumberFormatException ex){
+                writeln("Неверный тип данных");
+            }
+        }
+
+        while (true) {
+            try {
+                capital = parseBoolean(readWithMessage("Это столица? (true/false): ", false));
+                break;
+            }catch(NumberFormatException ex){
+                writeln("Так true или false?");
+            }
+        }
+
+
         Government government = getGoverment();
         Human human = getHuman();
 
@@ -109,8 +169,33 @@ public class ConsoleManager {
      * @return
      */
     public Coordinates getCoord(){
-        Float x = Float.parseFloat(readWithMessage("Введите позицию X (Float): ", true));
-        Double y = Double.parseDouble(readWithMessageMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587), NumUtil.DOUBLE_MAX, false));
+        Float x = 0f;
+        Double y = 0.0;
+
+        while (true) {
+            try {
+                String o = readWithMessage("Введите позицию X (Float): ", true);
+                if(o == null)
+                    break;
+
+                x = Float.parseFloat(o);
+                break;
+            } catch (NumberFormatException ex) {
+                writeln("Неверный тип данных");
+            }
+        }
+
+        while (true) {
+            try {
+                String o = readWithMessageMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587), NumUtil.DOUBLE_MAX, false);
+                if(o == null)
+                    break;
+                y = Double.parseDouble(o);
+                break;
+            } catch (NumberFormatException ex) {
+                writeln("Неверный тип данных");
+            }
+        }
 
         return new Coordinates(x, y);
     }
@@ -120,15 +205,26 @@ public class ConsoleManager {
      * @return
      */
     public Government getGoverment() {
+        Government out = null;
         StringBuilder sb = new StringBuilder();
         for (Government value : Government.values()) {
             sb.append("\n").append(value.ordinal()).append(" - ").append(value.toString());
         }
-        String inp = readWithMessage("Какой вид правления? Введите число или пустую строку: " + sb.toString(), true);
-        if (inp == null) {
-            return null;
+
+        while (true) {
+            try {
+                String inp = readWithMessage("Какой вид правления? Введите число: " + sb.toString(), false);
+                if (inp == null) {
+                    return null;
+                }
+                out = Government.byOrdinal(Integer.parseInt(inp));
+                break;
+            } catch (ClassCastException | InvalidValueException ex) {
+                writeln(ex.getMessage());
+            }
         }
-        return Government.byOrdinal(Integer.parseInt(inp));
+
+        return out;
     }
 
 
@@ -137,7 +233,21 @@ public class ConsoleManager {
      * @return
      */
     public Human getHuman(){
-        Integer age = Integer.parseInt(readWithMessageMinMax("Введите возвраст (Integer, больше нуля): ", new BigDecimal(0), NumUtil.INTEGER_MAX, true));
+
+        Integer age = 0;
+
+        while (true) {
+            try {
+                String o = readWithMessageMinMax("Введите возвраст (Integer, от 0 до INTEGER_MAX): ", new BigDecimal(0), NumUtil.INTEGER_MAX, true);
+                if(o == null)
+                    break;
+                age = Integer.parseInt(o);
+                break;
+            } catch (NumberFormatException ex) {
+                writeln("Неверный тип данных");
+            }
+        }
+
         return new Human(age);
     }
 
@@ -151,7 +261,8 @@ public class ConsoleManager {
             return true;
         } else if ("false".equals(s.toLowerCase())) {
             return false;
+        }else{
+            throw new NumberFormatException("Неверный тип данных");
         }
-        return false;
     }
 }

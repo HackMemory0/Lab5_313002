@@ -36,7 +36,7 @@ public class ExecuteScriptCommand extends ACommand {
         } catch (FileNotFoundException e) {
             consoleManager.writeln("Файла скрипта не найден.");
         }catch (Exception ex){
-            consoleManager.writeln(ex.getMessage());
+            consoleManager.writeln(ex.toString());
         }
     }
 }

@@ -23,6 +23,15 @@ public enum Government {
         throw new InvalidValueException("Не найдено, соответствующий строке: " + s);
     }
 
+    public static Government byName(String s) {
+        for (Government value : Government.values()) {
+            if (value.equals(s.toUpperCase())) {
+                return value;
+            }
+        }
+        throw new InvalidValueException("Не найдено, соответствующий строке: " + s);
+    }
+
     public int getId() {
         return id;
     }

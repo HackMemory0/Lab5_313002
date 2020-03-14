@@ -1,14 +1,2 @@
 clear
 add
-test
-12
-21
-1233 
-1447
-228
-12
-true
-3
-45
-show
-filter_contains_name test
