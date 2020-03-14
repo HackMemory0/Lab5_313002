@@ -12,6 +12,7 @@ public class ExitCommand extends ACommand {
 
     @Override
     public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+        //TODO добавить проверку скрипта
         String out = consoleManager.readWithMessage("Вы уверены? Данные не сохраняются (Y/N)", true);
         if(out.toLowerCase().equals("y")) System.exit(1);
     }

@@ -16,9 +16,29 @@ public class NumUtil {
                 bigDecimal = new BigDecimal(number.longValue());
             } else if (number instanceof Float || number instanceof Double) {
                 bigDecimal = new BigDecimal(number.doubleValue());
+            }else{
+                Double d = number.doubleValue();
+                bigDecimal = new BigDecimal(number.doubleValue());
             }
             return max.compareTo(bigDecimal) >= 0
                     && min.compareTo(bigDecimal) <= 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean isInRange2(BigDecimal number, BigDecimal min,
+                                    BigDecimal max) {
+        try {
+            /*BigDecimal bigDecimal = null;
+            if (number instanceof Integer || number instanceof Long) {
+                bigDecimal = new BigDecimal(number.longValue());
+            } else if (number instanceof Float || number instanceof Double) {
+                bigDecimal = new BigDecimal(number.doubleValue());
+            }*/
+
+            return max.compareTo(number) >= 0
+                    && min.compareTo(number) <= 0;
         } catch (NumberFormatException e) {
             return false;
         }

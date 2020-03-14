@@ -74,7 +74,7 @@ public class ConsoleManager {
             output = readWithMessage(message, canNull);
             if(output == null && canNull)
                 break;
-        }while (!NumUtil.isInRange(Double.parseDouble(output), min, max));
+        }while (!NumUtil.isInRange2(new BigDecimal(output), min, max));
 
         return output;
     }
@@ -101,7 +101,7 @@ public class ConsoleManager {
 
         while (true) {
             try {
-                String o = readWithMessage("Введите площадь (Double, любое число): ", false);
+                String o = readWithMessageMinMax("Введите площадь (Double, от нуля и больше): ", new BigDecimal(0), NumUtil.DOUBLE_MAX, false);
                 if (o == null)
                     break;
                 area = Double.parseDouble(o);
@@ -187,7 +187,7 @@ public class ConsoleManager {
 
         while (true) {
             try {
-                String o = readWithMessageMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587), NumUtil.DOUBLE_MAX, false);
+                String o = readWithMessageMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587.00000000000000000001), NumUtil.DOUBLE_MAX, false);
                 if(o == null)
                     break;
                 y = Double.parseDouble(o);
