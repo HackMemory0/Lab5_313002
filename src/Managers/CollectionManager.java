@@ -164,7 +164,7 @@ public class CollectionManager {
     public ArrayList<City> findByName(String name){
         ArrayList<City> cities = new ArrayList<City>();
         this.getCityCollection().forEach(x ->{
-            if(x.getName().equals(name))
+            if(x.getName().contains(name))
                 cities.add(x);
         });
 
