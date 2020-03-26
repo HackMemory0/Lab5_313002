@@ -48,7 +48,6 @@ public class CollectionManager {
     /**
      * добавляет новый элемент
      * @param city
-     * @return
      */
     public void addElement(City city){
         maxId+=1;
