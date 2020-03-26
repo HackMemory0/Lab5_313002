@@ -44,7 +44,7 @@ public class CommandsManager {
 
     public ACommand getCommand(String s) throws NoCommandException {
         if (!commands.containsKey(s)) {
-            throw new NoCommandException();
+            throw new NoCommandException("Команда не найдена");
         }
         return commands.get(s);
     }

@@ -26,9 +26,10 @@ public class ExecuteScriptCommand extends ACommand {
 
         Path pathToScript = Paths.get(args[0]);
         consoleManager.writeln("Идет выполнение скрипта: " + pathToScript.getFileName());
+        int lineNum = 1;
         try {
             ConsoleManager _consoleManager = new ConsoleManager(new FileReader(pathToScript.toFile()), true);
-            while (_consoleManager.hasNextLine()) {
+            for (lineNum=1; _consoleManager.hasNextLine(); lineNum++) {
                 String line = _consoleManager.read();
                 CommandsManager.getInstance().execute(line, _consoleManager, collectionManager);
             }
@@ -36,7 +37,7 @@ public class ExecuteScriptCommand extends ACommand {
         } catch (FileNotFoundException e) {
             consoleManager.writeln("Файла скрипта не найден.");
         }catch (Exception ex){
-            consoleManager.writeln(ex.toString());
+            consoleManager.writeln("\n\t" + ex.getMessage() + "\n\tError on line " + lineNum);
         }
     }
 }

@@ -4,6 +4,7 @@ import Collection.City;
 import Collection.Coordinates;
 import Collection.Government;
 import Collection.Human;
+import Exceptions.ExecutionException;
 import Exceptions.InvalidValueException;
 import Utils.NumUtil;
 
@@ -31,6 +32,7 @@ public class ConsoleManager {
 
     public void write(String msg){ System.out.print(msg); }
 
+    public boolean getIsScript(){ return isScript; }
 
     /**
      * выводит сообщение с вводом от пользователя
@@ -43,7 +45,7 @@ public class ConsoleManager {
 
         do {
             if (output == null) {
-                writeln("Вы ввели пустую строку, когда ожидалось не null");
+                writeln("Вы ввели пустую строку, попробуйте снова");
             }
 
             if(!isScript) {
@@ -108,6 +110,7 @@ public class ConsoleManager {
                 break;
             } catch (NumberFormatException ex) {
                 writeln("Неверный тип данных");
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -120,6 +123,7 @@ public class ConsoleManager {
                 break;
             }catch(NumberFormatException ex){
                 writeln("Неверный тип данных");
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -132,6 +136,7 @@ public class ConsoleManager {
                 break;
             }catch(NumberFormatException ex){
                 writeln("Неверный тип данных");
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -144,6 +149,7 @@ public class ConsoleManager {
                 break;
             }catch(NumberFormatException ex){
                 writeln("Неверный тип данных");
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -153,6 +159,7 @@ public class ConsoleManager {
                 break;
             }catch(NumberFormatException ex){
                 writeln("Так true или false?");
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -182,18 +189,20 @@ public class ConsoleManager {
                 break;
             } catch (NumberFormatException ex) {
                 writeln("Неверный тип данных");
+                if(isScript) throw new ExecutionException("");
             }
         }
 
         while (true) {
             try {
-                String o = readWithMessageMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587.00000000000000000001), NumUtil.DOUBLE_MAX, false);
+                String o = readWithMessageMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587), NumUtil.DOUBLE_MAX, false);
                 if(o == null)
                     break;
                 y = Double.parseDouble(o);
                 break;
             } catch (NumberFormatException ex) {
                 writeln("Неверный тип данных");
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -221,6 +230,7 @@ public class ConsoleManager {
                 break;
             } catch (ClassCastException | InvalidValueException ex) {
                 writeln(ex.getMessage());
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -245,6 +255,7 @@ public class ConsoleManager {
                 break;
             } catch (NumberFormatException ex) {
                 writeln("Неверный тип данных");
+                if(isScript) throw new ExecutionException("Cast error");
             }
         }
 
