@@ -33,11 +33,13 @@ public class ExecuteScriptCommand extends ACommand {
                 String line = _consoleManager.read();
                 CommandsManager.getInstance().execute(line, _consoleManager, collectionManager);
             }
-            consoleManager.writeln("Скрипт выполнен.");
+            //consoleManager.writeln("Скрипт выполнен.");
         } catch (FileNotFoundException e) {
             consoleManager.writeln("Файла скрипта не найден.");
         }catch (Exception ex){
             consoleManager.writeln("\n\t" + ex.getMessage() + "\n\tError on line " + lineNum);
+        }catch (StackOverflowError ex){
+            consoleManager.writeln("Стек переполнен, выполнение прервано");
         }
     }
 }

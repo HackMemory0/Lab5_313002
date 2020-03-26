@@ -9,5 +9,14 @@ TestName
 true
 2
 65
+
+
+
+
 info
+
+
+
+
+
 execute_script C:\Users\akper\Desktop\prog\Lab5_313002\script.txt
