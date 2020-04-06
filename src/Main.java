@@ -1,11 +1,12 @@
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import Exceptions.InvalidValueException;
-import Exceptions.NoCommandException;
-import Managers.CollectionManager;
-import Managers.CommandsManager;
-import Managers.ConsoleManager;
+import exceptions.InvalidValueException;
+import exceptions.NoCommandException;
+import managers.CollectionManager;
+import managers.CommandsManager;
+import managers.ConsoleManager;
+
 
 /**
  * Главный класс приложения
