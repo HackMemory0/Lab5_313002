@@ -6,31 +6,48 @@ import collection.Government;
 import collection.Human;
 import exceptions.ExecutionException;
 import exceptions.InvalidValueException;
+import lombok.extern.slf4j.Slf4j;
 import utils.NumUtil;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.Scanner;
 
 /**
  * Консольный менеджер
  */
+@Slf4j
 public class ConsoleManager {
 
     private Scanner scanner;
     private boolean isScript;
+    private Writer writer;
+    private Reader reader;
 
-    public ConsoleManager(Reader reader, boolean isScript)
+    public ConsoleManager(Reader reader, Writer writer, boolean isScript)
     {
+        this.reader = reader;
+        this.writer = writer;
         scanner = new Scanner(reader);
         this.isScript = isScript;
     }
 
-    public void writeln(String msg){
-        System.out.println(msg);
+    public void writeln(String message) {
+        write(message + "\n");
     }
 
-    public void write(String msg){ System.out.print(msg); }
+    public void write(String message) {
+        try {
+            writer.write(message);
+            writer.flush();
+        } catch (IOException e) {
+            log.error("Ошибка при выводе. {}", e.getMessage());
+        }
+    }
 
     public boolean getIsScript(){ return isScript; }
 
@@ -81,6 +98,26 @@ public class ConsoleManager {
         return output;
     }
 
+    public Number readWithParse(String msg, boolean canNull){
+        Number out = null;
+        while (true){
+            try{
+                String num = readWithMessage(msg, canNull);
+                NumberFormat format = NumberFormat.getInstance();
+                ParsePosition pos = new ParsePosition(0);
+                out = format.parse(num, pos);
+                if (pos.getIndex() != num.length() || pos.getErrorIndex() != -1) {
+                    throw new NumberFormatException("Неверный тип данных");
+                }
+                break;
+            }catch (NumberFormatException ex){
+                writeln(ex.getMessage());
+            }
+        }
+
+        return out;
+    }
+
     public String read() {
         return scanner.nextLine();
     }
@@ -97,6 +134,9 @@ public class ConsoleManager {
         Double area = 0.0, timezone = 0.0;
         long population = 0, metersAboveSeaLevel = 0;
         boolean capital = false;
+
+        //Long q = (long)readWithParse("Test value", false);
+        //writeln(q.toString());
 
         String name = readWithMessage("Введите название города: ", false);
         Coordinates coord = getCoord();

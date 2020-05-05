@@ -10,7 +10,7 @@ public class ShuffleCommand extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         collectionManager.shuffle();
         consoleManager.writeln("Коллекция была перемешана в случайном порядке");
     }

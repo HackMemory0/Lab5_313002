@@ -11,7 +11,7 @@ public class SaveCommand extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         collectionManager.save();
         consoleManager.writeln("Коллекция была сохранена.");
     }

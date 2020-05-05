@@ -8,12 +8,18 @@ public class CountLessThanGovernor extends ACommand {
     public CountLessThanGovernor(){
         cmdName = "count_less_than_governor";
         description = "выводит количество элементов, значение поля governor которых меньше заданного";
+        needInput = true;
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
-        Human human = consoleManager.getHuman();
-        long count = collectionManager.countLessThanGovernor(human);
+    public Object getInput(ConsoleManager consoleManager){
+        return consoleManager.getHuman();
+    }
+
+    @Override
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+        if(needInput && inputData == null) inputData = this.getInput(consoleManager);
+        long count = collectionManager.countLessThanGovernor((Human) inputData);
         consoleManager.writeln("Кол-во элементов, которые меньше заданого governor: " + count);
     }
 }

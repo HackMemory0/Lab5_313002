@@ -11,7 +11,7 @@ public class ShowCommand extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         consoleManager.writeln("Количество элементов в коллекции: " + collectionManager.getCityCollection().size());
         StringBuilder sb = new StringBuilder();
         collectionManager.getCityCollection().forEach(s -> sb.append(s).append("\n"));

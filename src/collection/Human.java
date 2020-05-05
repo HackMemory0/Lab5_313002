@@ -2,10 +2,11 @@ package collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 @XmlType(name = "human")
 @XmlRootElement
-public class Human implements Comparable {
+public class Human implements Comparable, Serializable {
     private Integer age; //Значение поля должно быть больше 0
 
     public Human(){}

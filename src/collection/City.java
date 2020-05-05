@@ -7,10 +7,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
+class LocalDateAdapter extends XmlAdapter<String, LocalDate> implements Serializable {
     public LocalDate unmarshal(String v)  {
         return LocalDate.parse(v);
     }
@@ -24,7 +25,7 @@ class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
  * Модель города
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class City implements Comparable {
+public class City implements Comparable, Serializable {
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null

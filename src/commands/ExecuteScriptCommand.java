@@ -7,6 +7,7 @@ import managers.ConsoleManager;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,7 +20,7 @@ public class ExecuteScriptCommand extends ACommand {
     }
 //execute_script C:\Users\akper\Desktop\prog\Lab5_313002\script.txt
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         if (args.length < argCount) {
             throw new InvalidValueException("Введено " + args.length + " аргументов, ожидалось " + argCount);
         }
@@ -28,7 +29,7 @@ public class ExecuteScriptCommand extends ACommand {
         consoleManager.writeln("Идет выполнение скрипта: " + pathToScript.getFileName());
         int lineNum = 1;
         try {
-            ConsoleManager _consoleManager = new ConsoleManager(new FileReader(pathToScript.toFile()), true);
+            ConsoleManager _consoleManager = new ConsoleManager(new FileReader(pathToScript.toFile()), new OutputStreamWriter(System.out), true);
             for (lineNum=1; _consoleManager.hasNextLine(); lineNum++) {
                 String line = _consoleManager.read();
                 CommandsManager.getInstance().execute(line, _consoleManager, collectionManager);

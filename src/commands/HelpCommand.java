@@ -14,7 +14,7 @@ public class HelpCommand extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
 
         List<ACommand> aCommands = CommandsManager.getInstance().getAllCommands();
         for (ACommand cmd: aCommands){

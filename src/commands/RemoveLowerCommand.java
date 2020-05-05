@@ -8,15 +8,20 @@ public class RemoveLowerCommand extends ACommand {
     public RemoveLowerCommand(){
         cmdName = "remove_lower";
         description = "удаляет из коллекции все элементы, меньшие, чем заданный";
+        needInput = true;
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public Object getInput(ConsoleManager consoleManager){
+        return consoleManager.getCity();
+    }
 
-        City city = consoleManager.getCity();
+    @Override
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+        if(needInput && inputData == null) inputData = this.getInput(consoleManager);
 
         int initSize = collectionManager.getCityCollection().size();
-        collectionManager.removeLower(city);
+        collectionManager.removeLower((City) inputData);
         int afterSize = collectionManager.getCityCollection().size();
 
         consoleManager.writeln("Было удалено " + (initSize - afterSize) + " элементов");

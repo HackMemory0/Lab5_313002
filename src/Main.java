@@ -1,41 +1,31 @@
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 
-import exceptions.InvalidValueException;
-import exceptions.NoCommandException;
-import managers.CollectionManager;
-import managers.CommandsManager;
-import managers.ConsoleManager;
-
+import lombok.extern.slf4j.Slf4j;
+import network.Client;
+import network.Server;
 
 /**
  * Главный класс приложения
  */
+
+@Slf4j
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+        String mode = System.getProperty("mode", "server").toLowerCase();
+        switch (mode){
+            case "cli":
+                new CLI();
+                break;
 
-        ConsoleManager consoleManager = new ConsoleManager(new InputStreamReader(System.in),false);
-        consoleManager.writeln("CLI версия 0.1");
-        consoleManager.writeln("Используйте help для получения справки");
+            case "client":
+                new Client(args).run();
+                break;
 
-        CollectionManager collectionManager = new CollectionManager(System.getenv("LAB5PATH"));
-
-        while (true) {
-            consoleManager.write("> ");
-            if (consoleManager.hasNextLine()) {
-                String cmd = consoleManager.read();
-
-                try {
-                    CommandsManager.getInstance().execute(cmd, consoleManager, collectionManager);
-                }catch (NoCommandException ex) {
-                    consoleManager.writeln("Такая команда не найдена :(\nВведите команду help, чтобы вывести спискок команд");
-                }catch (NumberFormatException|ClassCastException ex){
-                    consoleManager.writeln("Ошибка во время каста\n"+ex.getMessage());
-                } catch (InvalidValueException ex){
-                    consoleManager.writeln(ex.getMessage());
-                }
-            }
+            case "server":
+                new Server(args).run();
+                break;
         }
 
     }

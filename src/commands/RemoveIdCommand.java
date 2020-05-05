@@ -13,7 +13,7 @@ public class RemoveIdCommand extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         if (args.length < argCount) {
             throw new InvalidValueException("Введено " + args.length + " аргументов, ожидалось " + argCount);
         }

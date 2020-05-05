@@ -2,7 +2,9 @@ package collection;
 
 import exceptions.InvalidValueException;
 
-public enum Government {
+import java.io.Serializable;
+
+public enum Government implements Serializable {
     MATRIARCHY(0),
     MERITOCRACY(1),
     NOOCRACY(2),

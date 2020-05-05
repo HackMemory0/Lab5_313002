@@ -11,7 +11,7 @@ public class PrintFieldAscendingTimezoneCommand extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         collectionManager.sortByTimezone().forEach(x->consoleManager.writeln(x.toString()));
     }
 }

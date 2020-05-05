@@ -9,12 +9,18 @@ public class AddIfMinCommand extends ACommand {
     public AddIfMinCommand(){
         cmdName = "add_if_min";
         description = "добавляет новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции";
+        needInput = true;
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
-        City city = consoleManager.getCity();
-        Boolean res = collectionManager.addIfMin(city);
+    public Object getInput(ConsoleManager consoleManager){
+        return consoleManager.getCity();
+    }
+
+    @Override
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+        if(needInput && inputData == null) inputData = this.getInput(consoleManager);
+        Boolean res = collectionManager.addIfMin((City) inputData);
 
         if(res)
             consoleManager.writeln("Элемент был добавлен");

@@ -10,7 +10,7 @@ public class ClearCommad extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         collectionManager.clear();
         consoleManager.writeln("Коллекция была очищена");
     }

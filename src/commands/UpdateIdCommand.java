@@ -10,10 +10,16 @@ public class UpdateIdCommand extends ACommand {
         cmdName = "update";
         description = "обновляет значение элемента коллекции, id которого равен заданному";
         argCount = 1;
+        needInput = true;
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
+    public Object getInput(ConsoleManager consoleManager){
+        return consoleManager.getCity();
+    }
+
+    @Override
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
         if (args.length < 1) {
             throw new InvalidValueException("Введено " + args.length + " аргументов, ожидалось " + argCount);
         }
@@ -29,8 +35,8 @@ public class UpdateIdCommand extends ACommand {
         if(!collectionManager.checkIdExist(id))
             throw new InvalidValueException("Такого id не существует");
 
-        City city = consoleManager.getCity();
-        collectionManager.update(city, id);
+        if(needInput && inputData == null) inputData = this.getInput(consoleManager);
+        collectionManager.update((City) inputData, id);
         consoleManager.writeln("Элемент с id - " + id + " был изменен");
     }
 }

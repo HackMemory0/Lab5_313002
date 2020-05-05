@@ -49,6 +49,18 @@ public class CommandsManager {
         return commands.get(s);
     }
 
+    public ACommand parseCommand(String str){
+        ACommand cmd = null;
+        String[] parse = str.trim().split(" ");
+        if(!parse[0].equals("")) {
+            cmd = getCommand(parse[0].toLowerCase());
+            String[] args = Arrays.copyOfRange(parse, 1, parse.length);
+            cmd.setArgs(args);
+        }
+
+        return cmd;
+    }
+
     /**
      * Выполняет команды введенные пользователем
      * @param str
@@ -56,16 +68,7 @@ public class CommandsManager {
      * @param collectionManager
      */
     public void execute(String str, ConsoleManager consoleManager, CollectionManager collectionManager){
-        String[] parse = str.trim().split(" ");
-        if(!parse[0].equals("")) {
-            ACommand cmd = getCommand(parse[0].toLowerCase());
-            //consoleManager.writeln("execution cmd: " + parse[0]);
-
-            String[] args = Arrays.copyOfRange(parse, 1, parse.length);
-            //consoleManager.writeln("args count: " + args.length);
-
-            cmd.execute(consoleManager, collectionManager, args);
-        }
+        parseCommand(str).execute(consoleManager, collectionManager);
     }
 
 

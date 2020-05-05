@@ -262,6 +262,8 @@ public class CollectionManager {
         }
     }
 
+
+
     public ArrayList<City> getCityCollection() {
         return citiesArray.getCities();
     }

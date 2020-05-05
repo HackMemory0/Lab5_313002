@@ -2,10 +2,11 @@ package collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 @XmlType(name = "coordinates")
 @XmlRootElement
-public class Coordinates {
+public class Coordinates implements Serializable {
     private float x;
     private Double y; //Значение поля должно быть больше -587, Поле не может быть null
 

@@ -11,9 +11,9 @@ public class InfoCommand extends ACommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, String[] args) {
-        consoleManager.writeln("Тип: " + collectionManager.getCityCollection().getClass().getName());
-        consoleManager.writeln("Кол-во элементов: " + collectionManager.getCityCollection().size());
-        consoleManager.writeln("Дата инициализации: " + collectionManager.getInitDate().toString());
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+        consoleManager.writeln("Type; " + collectionManager.getCityCollection().getClass().getName());
+        consoleManager.writeln("Count: " + collectionManager.getCityCollection().size());
+        consoleManager.writeln("Init date: " + collectionManager.getInitDate().toString());
     }
 }
