@@ -12,6 +12,7 @@ import network.Server;
 @Slf4j
 public class Main {
 
+
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         String mode = System.getProperty("mode", "server").toLowerCase();
         switch (mode){

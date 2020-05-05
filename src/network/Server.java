@@ -4,6 +4,7 @@ import commands.ACommand;
 import exceptions.InvalidValueException;
 import lombok.extern.slf4j.Slf4j;
 import managers.CollectionManager;
+import managers.CommandsManager;
 import managers.ConsoleManager;
 import network.packets.*;
 import utils.AppConstant;
@@ -33,6 +34,8 @@ public class Server {
     }
 
 
+
+
     private boolean isRunning = false;
     private DatagramChannel channel;
     private Map<String, SocketAddress> clients =  new HashMap<String, SocketAddress>();
@@ -55,6 +58,23 @@ public class Server {
         } catch (SocketException e) {
             e.printStackTrace();
         }
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(200);
+                    System.out.println("Shutting down ...");
+                    channel.disconnect();
+                    collectionManager.save();
+
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void startServer(int port) throws IOException {
@@ -79,10 +99,27 @@ public class Server {
 
         SelectionKey clientKey = channel.register(selector, SelectionKey.OP_READ);
         clientKey.attach(new Con());
+
+
+        ConsoleManager cm = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
+        new Thread(() -> {
+            while(true) {
+                cm.write("> ");
+                if (cm.hasNextLine()) {
+                    String cmd = cm.read();
+                    CommandsManager.getInstance().execute(cmd, cm, collectionManager);
+                }
+            }
+        }).start();
+
+
+
         while(isRunning){
             try {
                 selector.select();
                 Iterator selectedKeys = selector.selectedKeys().iterator();
+
+
                 while (selectedKeys.hasNext()) {
                     SelectionKey key = (SelectionKey) selectedKeys.next();
                     selectedKeys.remove();
