@@ -33,6 +33,7 @@ public class Client {
     private UserPacket userPacket;
     private ConsoleManager consoleManager;
     private boolean isConnected = false;
+    private boolean isLogin = false;
     private int tryConnect = 5;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -71,22 +72,25 @@ public class Client {
     public void run() throws IOException, ClassNotFoundException, InterruptedException {
         consoleManager = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
 
-        while (true) {
+        back:
+        while (!isLogin) {
             consoleManager.write("Введите имя: ");
             if (consoleManager.hasNextLine()) {
                 String str = consoleManager.read();
                 if (!str.isEmpty()) {
                     this.userPacket = new UserPacket(str);
-                    break;
+                    send(new LoginPacket(this.userPacket));
+                    consoleManager.writeln("Waiting to connect to the server...");
+                    objectHandler(recv());
                 }
             }
         }
 
-        while(!isConnected) {
+        /*while(!isLogin) {
             send(new LoginPacket(this.userPacket));
             consoleManager.writeln("Waiting to connect to the server...");
             objectHandler(recv());
-        }
+        }*/
 
 
 
@@ -146,9 +150,11 @@ public class Client {
         if(obj != null) {
             if (obj instanceof LoginSuccessPacket) {
                 isConnected = true;
+                isLogin = true;
                 consoleManager.writeln(((LoginSuccessPacket) obj).getMessage());
             } else if (obj instanceof LoginFailedPacket) {
-                isConnected = false;
+                isConnected = true;
+                isLogin = false;
                 consoleManager.writeln(((LoginFailedPacket) obj).getMessage());
             } else if (obj instanceof CommandExecutionPacket) {
                 consoleManager.writeln(((CommandExecutionPacket) obj).getMessage());

@@ -104,7 +104,7 @@ public class Server {
                 }
 
             } catch (IOException e) {
-                System.err.println("IO Exception... " +(e.getMessage()!=null?e.getMessage():""));
+                log.error("IO Exception... " +(e.getMessage()!=null?e.getMessage():""));
             }
         }
     }
@@ -138,7 +138,7 @@ public class Server {
             if (!clients.containsKey(((LoginPacket) obj).getNick())) {
                 clients.put(((LoginPacket) obj).getNick(), client);
                 outObj = new LoginSuccessPacket("Connected");
-                consoleManager.writeln("User connected " + ((LoginPacket) obj).getNick() + ": " + client);
+                log.info("User connected " + ((LoginPacket) obj).getNick() + ": " + client);
             } else {
                 outObj = new LoginFailedPacket("User with this nick already exists");
             }
@@ -146,7 +146,7 @@ public class Server {
         } else if(obj instanceof LogoutPacket){
             if (clients.containsKey(((LogoutPacket) obj).getNick())) {
                 clients.remove(((LogoutPacket) obj).getNick());
-                consoleManager.writeln("User disconnected " + ((LogoutPacket) obj).getNick() + ": " + client);
+                log.info("User disconnected " + ((LogoutPacket) obj).getNick() + ": " + client);
             }
 
         }else if(obj instanceof ACommand){
