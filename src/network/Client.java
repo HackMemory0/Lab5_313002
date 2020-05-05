@@ -46,16 +46,21 @@ public class Client {
     }
 
     private void connect(String[] args) throws IOException {
-        if (args.length >= 2) {
-            connect(args[0], Integer.parseInt(args[1]));
-        } else if (args.length == 1) {
-            String[] hostAndPort = args[0].split(":");
-            if (hostAndPort.length != 2) {
-                throw new InvalidValueException("");
+        try {
+            if (args.length >= 2) {
+                connect(args[0], Integer.parseInt(args[1]));
+            } else if (args.length == 1) {
+                String[] hostAndPort = args[0].split(":");
+                if (hostAndPort.length != 2) {
+                    throw new InvalidValueException("");
+                }
+                connect(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+            } else {
+                connect("localhost", AppConstant.DEFAULT_PORT);
             }
-            connect(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
-        } else {
-            connect("localhost", AppConstant.DEFAULT_PORT);
+        }catch (Exception ex){
+            System.err.println(ex.getMessage());
+            System.exit(1);
         }
     }
 

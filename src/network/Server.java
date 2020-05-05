@@ -46,6 +46,9 @@ public class Server {
     private ConsoleManager consoleManager;
 
 
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        new Server(args).run();
+    }
 
 
     public Server(String[] args) throws IOException {
@@ -55,26 +58,29 @@ public class Server {
             }else{
                 startServer(AppConstant.DEFAULT_PORT);
             }
-        } catch (SocketException e) {
-            e.printStackTrace();
+        } catch (SocketException ex) {
+            System.err.println(ex.getMessage());
+        }catch (Exception ex){
+            System.err.println(ex.getMessage());
+            System.exit(1);
         }
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                try {
-                    Thread.sleep(200);
-                    System.out.println("Shutting down ...");
-                    channel.disconnect();
-                    collectionManager.save();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                Thread.sleep(200);
+                System.out.println("Shutting down ...");
 
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.stopServer();
+                channel.disconnect();
+                collectionManager.save();
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }));
     }
 
     private void startServer(int port) throws IOException {
@@ -104,10 +110,14 @@ public class Server {
         ConsoleManager cm = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
         new Thread(() -> {
             while(true) {
-                cm.write("> ");
                 if (cm.hasNextLine()) {
-                    String cmd = cm.read();
-                    CommandsManager.getInstance().execute(cmd, cm, collectionManager);
+                    try {
+                        String cmd = cm.read();
+                        CommandsManager.getInstance().execute(cmd, cm, collectionManager);
+                        cm.writeln("");
+                    }catch (Exception ex){
+                        cm.writeln(ex.getMessage());
+                    }
                 }
             }
         }).start();

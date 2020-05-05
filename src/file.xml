@@ -72,4 +72,22 @@
             <age>17</age>
         </governor>
     </city>
+    <city>
+        <id>5</id>
+        <name>1</name>
+        <coordinates>
+            <x>1.0</x>
+            <y>1.0</y>
+        </coordinates>
+        <creationDate>2020-05-06</creationDate>
+        <area>1.0</area>
+        <population>1</population>
+        <metersAboveSeaLevel>1</metersAboveSeaLevel>
+        <timezone>1.0</timezone>
+        <capital>true</capital>
+        <government>MERITOCRACY</government>
+        <governor>
+            <age>1</age>
+        </governor>
+    </city>
 </cities>
