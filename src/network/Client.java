@@ -16,20 +16,14 @@ import utils.Serializer;
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 @Slf4j
 public class Client {
-    protected DatagramSocket socket;
-    protected SocketAddress addressServer;
+    private DatagramSocket socket;
     private InetAddress IPAddress;
     private int PORT;
-    private ByteBuffer inBuff = ByteBuffer.allocate(AppConstant.MESSAGE_BUFFER);
     private UserPacket userPacket;
     private ConsoleManager consoleManager;
     private boolean isConnected = false;
@@ -45,14 +39,10 @@ public class Client {
     }
 
     private void connect(String host, int port) throws IOException {
-        //channel = DatagramChannel.open();
-        //channel.configureBlocking(false);
-        //channel.bind(null);
+        PORT = port;
+        IPAddress = InetAddress.getByName( host );
         socket = new DatagramSocket();
         socket.setSoTimeout(5000);
-        addressServer = new InetSocketAddress(host, port);
-        IPAddress = InetAddress.getByName( host );
-        PORT = port;
     }
 
     private void connect(String[] args) throws IOException {
@@ -72,7 +62,6 @@ public class Client {
     public void run() throws IOException, ClassNotFoundException, InterruptedException {
         consoleManager = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
 
-        back:
         while (!isLogin) {
             consoleManager.write("Введите имя: ");
             if (consoleManager.hasNextLine()) {
@@ -85,14 +74,6 @@ public class Client {
                 }
             }
         }
-
-        /*while(!isLogin) {
-            send(new LoginPacket(this.userPacket));
-            consoleManager.writeln("Waiting to connect to the server...");
-            objectHandler(recv());
-        }*/
-
-
 
         tryConnect = 1;
         while (isConnected) {
@@ -131,7 +112,6 @@ public class Client {
                 if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(cMgr));
                 send(cmd);
                 objectHandler(recv());
-                //cMgr.writeln(recv().toString());
             }
         }catch (NoCommandException ex) {
             cMgr.writeln("Такая команда не найдена :(\nВведите команду help, чтобы вывести спискок команд");
@@ -183,16 +163,6 @@ public class Client {
             DatagramPacket received = new DatagramPacket(receiveData, receiveData.length);
             socket.receive(received);
             if (received.getLength() != 0) {
-            /*inBuff = ByteBuffer.wrap(received.getData());
-            //inBuff.flip();
-
-
-            int limits = inBuff.limit();
-            byte bytes[] = new byte[limits];
-            inBuff.get(bytes, 0, limits);
-
-            out = Serializer.Deserialize(bytes);
-            inBuff.clear();*/
                 out = Serializer.Deserialize(received.getData());
             }
 

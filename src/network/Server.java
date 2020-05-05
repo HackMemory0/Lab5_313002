@@ -36,7 +36,6 @@ public class Server {
     private boolean isRunning = false;
     private DatagramChannel channel;
     private Map<String, SocketAddress> clients =  new HashMap<String, SocketAddress>();
-    private ByteBuffer inBuff = ByteBuffer.allocate(AppConstant.MESSAGE_BUFFER);
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private Selector selector = Selector.open();
 
@@ -158,7 +157,7 @@ public class Server {
                 outObj = new CommandExecutionPacket(ex.getMessage());
             }
             log.info(obj.toString());
-            log.warn(client.toString());
+            log.info(client.toString());
         }
 
         return outObj;
