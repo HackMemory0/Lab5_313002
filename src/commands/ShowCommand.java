@@ -3,7 +3,7 @@ package commands;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class ShowCommand extends ACommand {
+public class ShowCommand extends AbstractCommand {
 
     public ShowCommand(){
         cmdName = "show";

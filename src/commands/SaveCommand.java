@@ -3,7 +3,7 @@ package commands;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class SaveCommand extends ACommand {
+public class SaveCommand extends AbstractCommand {
 
     public SaveCommand(){
         cmdName = "save";

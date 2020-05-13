@@ -6,7 +6,7 @@ import managers.ConsoleManager;
 
 import java.util.List;
 
-public class HelpCommand extends ACommand {
+public class HelpCommand extends AbstractCommand {
 
     public HelpCommand(){
         cmdName = "help";
@@ -16,8 +16,8 @@ public class HelpCommand extends ACommand {
     @Override
     public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
 
-        List<ACommand> aCommands = CommandsManager.getInstance().getAllCommands();
-        for (ACommand cmd: aCommands){
+        List<AbstractCommand> aCommands = CommandsManager.getInstance().getAllCommands();
+        for (AbstractCommand cmd: aCommands){
             consoleManager.writeln(cmd.getCmdName() + " - " + cmd.getDescription() );
         }
     }

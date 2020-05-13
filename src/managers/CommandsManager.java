@@ -17,7 +17,7 @@ public class CommandsManager {
         return instance;
     }
 
-    private Map<String, ACommand> commands = new HashMap<>();
+    private Map<String, AbstractCommand> commands = new HashMap<>();
 
     public CommandsManager(){
         addCommand(new AddCommand());
@@ -38,19 +38,19 @@ public class CommandsManager {
         addCommand(new ExecuteScriptCommand());
     }
 
-    private void addCommand(ACommand cmd){
+    private void addCommand(AbstractCommand cmd){
         commands.put(cmd.getCmdName(), cmd);
     }
 
-    public ACommand getCommand(String s) throws NoCommandException {
+    public AbstractCommand getCommand(String s) throws NoCommandException {
         if (!commands.containsKey(s)) {
             throw new NoCommandException("Команда не найдена");
         }
         return commands.get(s);
     }
 
-    public ACommand parseCommand(String str){
-        ACommand cmd = null;
+    public AbstractCommand parseCommand(String str){
+        AbstractCommand cmd = null;
         String[] parse = str.trim().split(" ");
         if(!parse[0].equals("")) {
             cmd = getCommand(parse[0].toLowerCase());
@@ -72,7 +72,7 @@ public class CommandsManager {
     }
 
 
-    public List<ACommand> getAllCommands() {
+    public List<AbstractCommand> getAllCommands() {
         return new ArrayList<>(commands.values());
     }
 }

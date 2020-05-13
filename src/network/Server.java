@@ -1,6 +1,6 @@
 package network;
 
-import commands.ACommand;
+import commands.AbstractCommand;
 import exceptions.InvalidValueException;
 import lombok.extern.slf4j.Slf4j;
 import managers.CollectionManager;
@@ -107,7 +107,7 @@ public class Server {
         clientKey.attach(new Con());
 
 
-        ConsoleManager cm = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
+        /*ConsoleManager cm = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
         new Thread(() -> {
             while(true) {
                 if (cm.hasNextLine()) {
@@ -120,7 +120,7 @@ public class Server {
                     }
                 }
             }
-        }).start();
+        }).start();*/
 
 
 
@@ -195,10 +195,10 @@ public class Server {
                 log.info("User disconnected " + ((LogoutPacket) obj).getNick() + ": " + client);
             }
 
-        }else if(obj instanceof ACommand){
+        }else if(obj instanceof AbstractCommand){
             outputStream.reset();
             try {
-                ((ACommand) obj).execute(consoleManager, collectionManager);
+                ((AbstractCommand) obj).execute(consoleManager, collectionManager);
                 outObj = new CommandExecutionPacket(new String(outputStream.toByteArray()));
             }catch (InvalidValueException ex){
                 outObj = new CommandExecutionPacket(ex.getMessage());

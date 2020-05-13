@@ -4,7 +4,7 @@ import exceptions.InvalidValueException;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class RemoveIdCommand extends ACommand {
+public class RemoveIdCommand extends AbstractCommand {
 
     public RemoveIdCommand(){
         cmdName = "remove";
@@ -21,9 +21,8 @@ public class RemoveIdCommand extends ACommand {
         long id;
         try {
             id = Long.parseLong(args[0]);
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-            return;
+        } catch (Exception e) {
+            throw new InvalidValueException(e.getMessage());
         }
 
         if(!collectionManager.checkIdExist(id))

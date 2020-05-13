@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Абстрактный класс для команд
  */
-public abstract class ACommand implements Serializable {
+public abstract class AbstractCommand implements Serializable {
     int argCount = 0;
     String[] args;
     String cmdName;
@@ -16,7 +16,7 @@ public abstract class ACommand implements Serializable {
     boolean needInput = false;
     Object inputData = null;
 
-    public ACommand(){}
+    public AbstractCommand(){}
     /**
      *
      * @param consoleManager управление консолью

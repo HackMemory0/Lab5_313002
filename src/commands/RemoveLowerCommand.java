@@ -1,10 +1,10 @@
 package commands;
 
-import collection.City;
+import models.City;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class RemoveLowerCommand extends ACommand {
+public class RemoveLowerCommand extends AbstractCommand {
     public RemoveLowerCommand(){
         cmdName = "remove_lower";
         description = "удаляет из коллекции все элементы, меньшие, чем заданный";

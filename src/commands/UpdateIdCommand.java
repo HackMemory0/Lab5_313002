@@ -1,11 +1,11 @@
 package commands;
 
-import collection.City;
+import models.City;
 import exceptions.InvalidValueException;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class UpdateIdCommand extends ACommand {
+public class UpdateIdCommand extends AbstractCommand {
     public UpdateIdCommand(){
         cmdName = "update";
         description = "обновляет значение элемента коллекции, id которого равен заданному";
@@ -27,9 +27,8 @@ public class UpdateIdCommand extends ACommand {
         long id;
         try {
             id = Long.parseLong(args[0]);
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-            return;
+        } catch (Exception e) {
+            throw new InvalidValueException(e.getMessage());
         }
 
         if(!collectionManager.checkIdExist(id))

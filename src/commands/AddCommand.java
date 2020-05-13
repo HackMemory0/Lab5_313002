@@ -1,12 +1,10 @@
 package commands;
 
-import collection.City;
+import models.City;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-import java.io.Serializable;
-
-public class AddCommand extends ACommand  {
+public class AddCommand extends AbstractCommand {
 
     public AddCommand(){
         cmdName = "add";

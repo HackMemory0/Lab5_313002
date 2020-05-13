@@ -3,7 +3,7 @@ package commands;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class ExitCommand extends ACommand {
+public class ExitCommand extends AbstractCommand {
 
     public ExitCommand(){
         cmdName = "exit";

@@ -3,7 +3,7 @@ package commands;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class PrintFieldAscendingTimezoneCommand extends ACommand {
+public class PrintFieldAscendingTimezoneCommand extends AbstractCommand {
 
     public PrintFieldAscendingTimezoneCommand(){
         cmdName = "print_field_ascending_timezone";

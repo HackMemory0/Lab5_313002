@@ -3,7 +3,7 @@ package commands;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class ClearCommad extends ACommand {
+public class ClearCommad extends AbstractCommand {
     public ClearCommad(){
         cmdName = "clear";
         description = "очищает коллекцию";

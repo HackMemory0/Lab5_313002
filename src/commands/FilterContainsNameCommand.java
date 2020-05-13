@@ -1,13 +1,13 @@
 package commands;
 
-import collection.City;
+import models.City;
 import exceptions.InvalidValueException;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
 import java.util.ArrayList;
 
-public class FilterContainsNameCommand extends ACommand {
+public class FilterContainsNameCommand extends AbstractCommand {
     public FilterContainsNameCommand(){
         cmdName = "filter_contains_name";
         description = "выводит элементы, значение поля name которых содержит заданную подстроку";

@@ -3,7 +3,7 @@ package commands;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class InfoCommand extends ACommand {
+public class InfoCommand extends AbstractCommand {
 
     public InfoCommand(){
         cmdName = "info";

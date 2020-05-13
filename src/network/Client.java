@@ -1,11 +1,12 @@
 package network;
 
-import commands.ACommand;
+import commands.AbstractCommand;
 import commands.ExecuteScriptCommand;
 import commands.ExitCommand;
 import commands.SaveCommand;
 import exceptions.InvalidValueException;
 import exceptions.NoCommandException;
+import exceptions.SelfCallingScriptException;
 import lombok.extern.slf4j.Slf4j;
 import managers.CommandsManager;
 import managers.ConsoleManager;
@@ -18,9 +19,13 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 
 @Slf4j
 public class Client {
+    private HashSet<String> executePaths = new HashSet<>();
+    private boolean executeFault = false;
+
     private DatagramSocket socket;
     private InetAddress IPAddress;
     private int PORT;
@@ -84,6 +89,8 @@ public class Client {
         while (isConnected) {
             consoleManager.write("> ");
             if (consoleManager.hasNextLine()) {
+                executePaths.clear();
+                executeFault = false;
                 sendCommand(consoleManager.read(), consoleManager);
             }
         }
@@ -92,29 +99,37 @@ public class Client {
     private void sendCommand(String sCmd, ConsoleManager cMgr) throws IOException, ClassNotFoundException {
         if(sCmd.isEmpty()) return;
         try {
-            ACommand cmd = CommandsManager.getInstance().parseCommand(sCmd);
+            AbstractCommand cmd = CommandsManager.getInstance().parseCommand(sCmd);
             if(cmd instanceof ExitCommand){ send(new LogoutPacket(this.userPacket)); socket.disconnect(); isConnected = false; }
             else if(cmd instanceof SaveCommand){ cMgr.writeln("Команда не работает в клиентской части."); }
             else if(cmd instanceof ExecuteScriptCommand){
+
+                if(executePaths.contains(cmd.getArgs()[0])) {
+                    executeFault = true;
+                    throw new SelfCallingScriptException("Рекурсивный вызов запрещен");
+                }
+
                 Path pathToScript = Paths.get(cmd.getArgs()[0]);
+                executePaths.add(cmd.getArgs()[0]);
                 int lineNum = 1;
                 try {
-                    ConsoleManager _consoleManager = new ConsoleManager(new FileReader(pathToScript.toFile()), new OutputStreamWriter(System.out), true);
-                    for (lineNum=1; _consoleManager.hasNextLine(); lineNum++) {
-                        String line = _consoleManager.read().trim();
-                        if(!line.isEmpty()) { sendCommand(line, _consoleManager); }
+                    cMgr = new ConsoleManager(new FileReader(pathToScript.toFile()), new OutputStreamWriter(System.out), true);
+                    for (lineNum=1; cMgr.hasNextLine(); lineNum++) {
+                        String line = cMgr.read().trim();
+                        if(!line.isEmpty() && !executeFault) { sendCommand(line, cMgr); }
                     }
                 } catch (FileNotFoundException e) {
-                    cMgr.writeln("Файла скрипта не найден.");
-                }catch (Exception ex){
-                    consoleManager.writeln("\n\t" + ex.getMessage() + "\n\tError on line " + lineNum);
-                }catch (StackOverflowError ex){
+                    consoleManager.writeln("Файла скрипта не найден.");
+                }catch (SelfCallingScriptException ex){
+                    consoleManager.writeln(ex.getMessage());
+                }catch (StackOverflowError | NullPointerException ex){
                     consoleManager.writeln("Стек переполнен, выполнение прервано");
+                    return;
                 }
 
             }
             else {
-                if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(cMgr));
+                if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(consoleManager));
                 send(cmd);
                 objectHandler(recv());
             }

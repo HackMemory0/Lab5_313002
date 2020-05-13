@@ -1,10 +1,10 @@
 package commands;
 
-import collection.City;
+import models.City;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
-public class AddIfMinCommand extends ACommand {
+public class AddIfMinCommand extends AbstractCommand {
 
     public AddIfMinCommand(){
         cmdName = "add_if_min";

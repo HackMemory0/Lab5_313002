@@ -1,8 +1,8 @@
 package managers;
 
-import collection.Cities;
-import collection.City;
-import collection.Human;
+import models.Cities;
+import models.City;
+import models.Human;
 import exceptions.DuplicateIdException;
 
 import javax.xml.bind.*;

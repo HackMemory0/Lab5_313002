@@ -1,4 +1,4 @@
-package collection;
+package models;
 
 import exceptions.InvalidValueException;
 
