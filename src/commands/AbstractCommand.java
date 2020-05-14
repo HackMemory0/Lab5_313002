@@ -28,6 +28,8 @@ public abstract class AbstractCommand implements Serializable {
         return null;
     }
 
+
+    public int getArgCount(){ return argCount; }
     public String getCmdName() {
         return cmdName;
     }

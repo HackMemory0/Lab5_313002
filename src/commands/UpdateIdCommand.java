@@ -20,15 +20,11 @@ public class UpdateIdCommand extends AbstractCommand {
 
     @Override
     public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
-        if (args.length < 1) {
-            throw new InvalidValueException("Введено " + args.length + " аргументов, ожидалось " + argCount);
-        }
-
         long id;
         try {
             id = Long.parseLong(args[0]);
         } catch (Exception e) {
-            throw new InvalidValueException(e.getMessage());
+            throw new InvalidValueException("Неверный тип данных");
         }
 
         if(!collectionManager.checkIdExist(id))
@@ -37,5 +33,7 @@ public class UpdateIdCommand extends AbstractCommand {
         if(needInput && inputData == null) inputData = this.getInput(consoleManager);
         collectionManager.update((City) inputData, id);
         consoleManager.writeln("Элемент с id - " + id + " был изменен");
+
+        inputData = null;
     }
 }

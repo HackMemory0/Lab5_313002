@@ -23,5 +23,6 @@ public class AddCommand extends AbstractCommand {
         collectionManager.addElement((City) inputData);
 
         consoleManager.writeln("Добавлена новая запись.");
+        inputData = null;
     }
 }

@@ -14,10 +14,6 @@ public class RemoveIdCommand extends AbstractCommand {
 
     @Override
     public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
-        if (args.length < argCount) {
-            throw new InvalidValueException("Введено " + args.length + " аргументов, ожидалось " + argCount);
-        }
-
         long id;
         try {
             id = Long.parseLong(args[0]);

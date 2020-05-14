@@ -14,11 +14,6 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-
-        String a = "     qweqwe123123   qweqwe    ".trim();
-        System.out.println(a.split("\\s+")[0]);
-
-
         String mode = System.getProperty("mode", "cli").toLowerCase();
         switch (mode){
             case "cli":

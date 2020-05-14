@@ -27,7 +27,8 @@ public class CLI {
         while (true) {
             consoleManager.write("> ");
             if (consoleManager.hasNextLine()) {
-                String cmd = consoleManager.read();
+                String cmd = consoleManager.read().trim();
+                if(cmd.equals("")) continue;
 
                 try {
                     CommandsManager.getInstance().execute(cmd, consoleManager, collectionManager);

@@ -25,6 +25,7 @@ import java.util.HashSet;
 public class Client {
     private HashSet<String> executePaths = new HashSet<>();
     private boolean executeFault = false;
+    private int executeCount = 0;
 
     private DatagramSocket socket;
     private InetAddress IPAddress;
@@ -33,7 +34,7 @@ public class Client {
     private ConsoleManager consoleManager;
     private boolean isConnected = false;
     private boolean isLogin = false;
-    private int tryConnect = 5;
+    private int tryConnect = 2;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         new Client(args).run();
@@ -47,7 +48,7 @@ public class Client {
         PORT = port;
         IPAddress = InetAddress.getByName( host );
         socket = new DatagramSocket();
-        socket.setSoTimeout(5000);
+        socket.setSoTimeout(3000);
     }
 
     private void connect(String[] args) throws IOException {
@@ -72,18 +73,20 @@ public class Client {
     public void run() throws IOException, ClassNotFoundException, InterruptedException {
         consoleManager = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
 
-        while (!isLogin) {
+        while (true) {
             consoleManager.write("Введите имя: ");
-            if (consoleManager.hasNextLine()) {
+            if(consoleManager.hasNextLine()) {
                 String str = consoleManager.read();
                 if (!str.isEmpty()) {
                     this.userPacket = new UserPacket(str);
                     send(new LoginPacket(this.userPacket));
                     consoleManager.writeln("Waiting to connect to the server...");
                     objectHandler(recv());
+                    if(isLogin) break;
                 }
             }
         }
+
 
         tryConnect = 1;
         while (isConnected) {
@@ -91,26 +94,31 @@ public class Client {
             if (consoleManager.hasNextLine()) {
                 executePaths.clear();
                 executeFault = false;
+                executeCount = 0;
+
                 sendCommand(consoleManager.read(), consoleManager);
             }
         }
     }
 
     private void sendCommand(String sCmd, ConsoleManager cMgr) throws IOException, ClassNotFoundException {
-        if(sCmd.isEmpty()) return;
+        if(sCmd.isEmpty() || executeFault) return;
         try {
             AbstractCommand cmd = CommandsManager.getInstance().parseCommand(sCmd);
             if(cmd instanceof ExitCommand){ send(new LogoutPacket(this.userPacket)); socket.disconnect(); isConnected = false; }
             else if(cmd instanceof SaveCommand){ cMgr.writeln("Команда не работает в клиентской части."); }
             else if(cmd instanceof ExecuteScriptCommand){
 
-                if(executePaths.contains(cmd.getArgs()[0])) {
+                executeCount++;
+                if(executeCount == 127) throw new StackOverflowError();
+                /*if(executePaths.contains(cmd.getArgs()[0])) {
                     executeFault = true;
                     throw new SelfCallingScriptException("Рекурсивный вызов запрещен");
-                }
+                }*/
 
                 Path pathToScript = Paths.get(cmd.getArgs()[0]);
-                executePaths.add(cmd.getArgs()[0]);
+                //executePaths.add(cmd.getArgs()[0]);
+
                 int lineNum = 1;
                 try {
                     cMgr = new ConsoleManager(new FileReader(pathToScript.toFile()), new OutputStreamWriter(System.out), true);
@@ -118,18 +126,28 @@ public class Client {
                         String line = cMgr.read().trim();
                         if(!line.isEmpty() && !executeFault) { sendCommand(line, cMgr); }
                     }
-                } catch (FileNotFoundException e) {
-                    consoleManager.writeln("Файла скрипта не найден.");
+                } catch (FileNotFoundException ex) {
+                    executeFault = true;
+                    consoleManager.writeln("Файла не найден.");
+                    log.error(ex.getMessage());
                 }catch (SelfCallingScriptException ex){
                     consoleManager.writeln(ex.getMessage());
-                }catch (StackOverflowError | NullPointerException ex){
-                    consoleManager.writeln("Стек переполнен, выполнение прервано");
-                    return;
+                    log.error(ex.getMessage());
+                }catch (StackOverflowError ex){
+                    if(!executeFault) {
+                        consoleManager.writeln("Стек переполнен, выполнение прервано");
+                    }
+
+                    executeFault = true;
+                }catch (Exception ex){
+                    executeFault = true;
+                    consoleManager.writeln(ex.getMessage());
+                    log.error(ex.getMessage());
                 }
 
             }
             else {
-                if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(consoleManager));
+                if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(cMgr));
                 send(cmd);
                 objectHandler(recv());
             }
@@ -172,6 +190,7 @@ public class Client {
             socket.send(packet);
         }catch (IOException ex){
             consoleManager.writeln(ex.getMessage());
+            log.error(ex.getMessage());
         }
 
     }
@@ -191,6 +210,7 @@ public class Client {
 
             tryConnect--;
             consoleManager.writeln("Failed to connect");
+            log.error(ex.getMessage());
         }
 
         return out;

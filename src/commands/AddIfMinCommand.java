@@ -26,5 +26,7 @@ public class AddIfMinCommand extends AbstractCommand {
             consoleManager.writeln("Элемент был добавлен");
         else
             consoleManager.writeln("Элемент не был добавлен. Элемент оказался больше минимального");
+
+        inputData = null;
     }
 }

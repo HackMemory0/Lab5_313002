@@ -1,6 +1,7 @@
 package managers;
 
 import commands.*;
+import exceptions.InvalidValueException;
 import exceptions.NoCommandException;
 import java.util.*;
 
@@ -52,11 +53,11 @@ public class CommandsManager {
     public AbstractCommand parseCommand(String str){
         AbstractCommand cmd = null;
         String[] parse = str.trim().split("\\s+");
-        if(!parse[0].equals("")) {
-            cmd = getCommand(parse[0].toLowerCase());
-            String[] args = Arrays.copyOfRange(parse, 1, parse.length);
+        cmd = getCommand(parse[0].toLowerCase());
+        String[] args = Arrays.copyOfRange(parse, 1, parse.length);
+        if(cmd.getArgCount() == args.length)
             cmd.setArgs(args);
-        }
+        else throw new InvalidValueException("Введено " + args.length + " аргументов, ожидалось " + cmd.getArgCount());
 
         return cmd;
     }

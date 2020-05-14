@@ -21,5 +21,7 @@ public class CountLessThanGovernor extends AbstractCommand {
         if(needInput && inputData == null) inputData = this.getInput(consoleManager);
         long count = collectionManager.countLessThanGovernor((Human) inputData);
         consoleManager.writeln("Кол-во элементов, которые меньше заданого governor: " + count);
+
+        inputData = null;
     }
 }

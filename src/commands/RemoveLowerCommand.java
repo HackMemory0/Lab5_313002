@@ -25,5 +25,7 @@ public class RemoveLowerCommand extends AbstractCommand {
         int afterSize = collectionManager.getCityCollection().size();
 
         consoleManager.writeln("Было удалено " + (initSize - afterSize) + " элементов");
+
+        inputData = null;
     }
 }
