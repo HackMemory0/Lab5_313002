@@ -51,7 +51,7 @@ public class CommandsManager {
 
     public AbstractCommand parseCommand(String str){
         AbstractCommand cmd = null;
-        String[] parse = str.trim().split(" ");
+        String[] parse = str.trim().split("\\s+");
         if(!parse[0].equals("")) {
             cmd = getCommand(parse[0].toLowerCase());
             String[] args = Arrays.copyOfRange(parse, 1, parse.length);
