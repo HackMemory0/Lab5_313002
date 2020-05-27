@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import models.Human;
 import managers.CollectionManager;
 import managers.ConsoleManager;
@@ -17,7 +19,7 @@ public class CountLessThanGovernor extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         if(needInput && inputData == null) inputData = this.getInput(consoleManager);
         long count = collectionManager.countLessThanGovernor((Human) inputData);
         consoleManager.writeln("Кол-во элементов, которые меньше заданого governor: " + count);

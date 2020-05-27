@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
@@ -22,7 +24,7 @@ public abstract class AbstractCommand implements Serializable {
      * @param consoleManager управление консолью
      * @param collectionManager управление коллекцией
      */
-    public abstract void execute(ConsoleManager consoleManager, CollectionManager collectionManager);
+    public abstract void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials);
 
     public Object getInput(ConsoleManager consoleManager){
         return null;
@@ -41,5 +43,16 @@ public abstract class AbstractCommand implements Serializable {
 
     public void setArgs(String[] args){ this.args = args; }
     public void setInputData(Object inputData){ this.inputData = inputData; }
+
+    public boolean isNumeric(String strNum) {
+        if (strNum == null)
+            return false;
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 
 }

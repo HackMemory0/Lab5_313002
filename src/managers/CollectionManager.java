@@ -19,6 +19,7 @@ public class CollectionManager {
     private Cities citiesArray;
     private File xmlCollection;
     private Long maxId = 0L;
+    private ArrayList<City> collection;
 
     /**
      * Класс, который работает с коллекцией
@@ -44,15 +45,26 @@ public class CollectionManager {
         }
     }
 
+    public CollectionManager(){
+        this.collection = new ArrayList<>();
+        this.initDate = LocalDate.now();
+    }
+
+    public CollectionManager(ArrayList<City> collection){
+        this.initDate = LocalDate.now();
+        this.collection = collection;
+        this.maxId = (long) (collection.size() + 1);
+    }
+
     /**
      * добавляет новый элемент
      * @param city
      */
     public void addElement(City city){
         maxId+=1;
-        city.setId(maxId);
-        city.setCreationDate(LocalDate.now());
-        city.checkFields();
+//        city.setId(maxId);
+//        city.setCreationDate(LocalDate.now());
+//        city.checkFields();
 
         this.getCityCollection().add(city);
     }
@@ -188,6 +200,7 @@ public class CollectionManager {
             JAXBContext jaxbContext = JAXBContext.newInstance(Cities.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             citiesArray = (Cities) jaxbUnmarshaller.unmarshal(inputStreamReader);
+            collection = citiesArray.getCities();
             citiesArray.getCities().forEach(x-> {
                 if(maxId < x.getId())
                     maxId = x.getId();
@@ -233,7 +246,7 @@ public class CollectionManager {
 
     public ArrayList<City> sortById(){
         ArrayList<City> sortColl = new ArrayList<City>(this.getCityCollection());
-        sortColl.sort(Comparator.comparing(e -> e.getId()));
+        sortColl.sort(Comparator.comparing(City::getId));
 
         return sortColl;
     }
@@ -244,7 +257,7 @@ public class CollectionManager {
      */
     public ArrayList<City> sortByTimezone(){
         ArrayList<City> sortColl = new ArrayList<City>(this.getCityCollection());
-        sortColl.sort(Comparator.comparing(e -> e.getTimezone()));
+        sortColl.sort(Comparator.comparing(City::getTimezone));
 
         return sortColl;
     }
@@ -265,7 +278,11 @@ public class CollectionManager {
 
 
     public ArrayList<City> getCityCollection() {
-        return citiesArray.getCities();
+        return collection;
+    }
+
+    public void setCityCollection(ArrayList<City> collection){
+        this.collection = collection;
     }
 
     public LocalDate getInitDate() {

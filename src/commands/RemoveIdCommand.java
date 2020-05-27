@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import exceptions.InvalidValueException;
 import managers.CollectionManager;
 import managers.ConsoleManager;
@@ -13,7 +15,7 @@ public class RemoveIdCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         long id;
         try {
             id = Long.parseLong(args[0]);

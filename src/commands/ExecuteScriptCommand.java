@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import exceptions.InvalidValueException;
 import managers.CollectionManager;
 import managers.CommandsManager;
@@ -22,7 +24,7 @@ public class ExecuteScriptCommand extends AbstractCommand {
 
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
 
         executeFault = false;
         Path pathToScript = Paths.get(args[0]);

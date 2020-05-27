@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
@@ -11,7 +13,7 @@ public class PrintFieldAscendingTimezoneCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         collectionManager.sortByTimezone().forEach(x->consoleManager.writeln(x.toString()));
     }
 }

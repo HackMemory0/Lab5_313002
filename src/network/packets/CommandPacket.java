@@ -1,22 +1,25 @@
 package network.packets;
 
+import commands.AbstractCommand;
+import database.Credentials;
+
 import java.io.Serializable;
 
 public class CommandPacket implements Serializable {
 
-    private String cmdName;
-    private String[] args;
+    private AbstractCommand command;
+    private Credentials credentials;
 
-    public CommandPacket(String cmdName, String[] args){
-        this.cmdName = cmdName;
-        this.args = args;
+    public CommandPacket(AbstractCommand command, Credentials credentials){
+        this.command = command;
+        this.credentials = credentials;
     }
 
-    public String getCmdName() {
-        return cmdName;
+    public AbstractCommand getCommand() {
+        return command;
     }
 
-    public String[] getArgs() {
-        return args;
+    public Credentials getCredentials() {
+        return credentials;
     }
 }

@@ -5,10 +5,10 @@ import exceptions.InvalidValueException;
 import java.io.Serializable;
 
 public enum Government implements Serializable {
-    MATRIARCHY(0),
-    MERITOCRACY(1),
-    NOOCRACY(2),
-    PLUTOCRACY(3);
+    MATRIARCHY(1),
+    MERITOCRACY(2),
+    NOOCRACY(3),
+    PLUTOCRACY(4);
 
     private int id;
 

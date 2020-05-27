@@ -21,6 +21,8 @@ public class CommandsManager {
     private Map<String, AbstractCommand> commands = new HashMap<>();
 
     public CommandsManager(){
+        addCommand(new LoginCommand());
+        addCommand(new RegisterCommand());
         addCommand(new AddCommand());
         addCommand(new HelpCommand());
         addCommand(new ExitCommand());
@@ -69,7 +71,7 @@ public class CommandsManager {
      * @param collectionManager
      */
     public void execute(String str, ConsoleManager consoleManager, CollectionManager collectionManager){
-        parseCommand(str).execute(consoleManager, collectionManager);
+        //parseCommand(str).execute(consoleManager, collectionManager);
     }
 
 

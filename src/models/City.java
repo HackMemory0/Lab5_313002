@@ -57,6 +57,21 @@ public class City implements Comparable, Serializable {
     }
 
 
+    public City(Long id, String name, Coordinates coordinates, LocalDate creationDate, Double area, long population, long metersAboveSeaLevel, double timezone, boolean capital, Government government, Human governor){
+        this.id = id;
+        this.name = name;
+        this.coordinates = coordinates;
+        this.creationDate = LocalDate.now();
+        this.area = area;
+        this.population = population;
+        this.metersAboveSeaLevel = metersAboveSeaLevel;
+        this.timezone = timezone;
+        this.capital = capital;
+        this.government = government;
+        this.governor = governor;
+    }
+
+
     public void checkFields(){
         if(id != 0L){
             if(!NumUtil.isInRange(id, new BigDecimal(0), NumUtil.LONG_MAX)){

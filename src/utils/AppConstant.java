@@ -7,5 +7,10 @@ public class AppConstant {
 
     public static final String FILE_PATH = System.getenv("PROG_PATH");
 
-    public final static String VERSION = "0.2";
+    public final static String VERSION = "0.3";
+
+    public final static String DB_URL = "jdbc:postgresql://localhost:5432/prog-lab";
+    public final static String DB_USER = "postgres";
+    public final static String DB_PASS = "root";
+
 }

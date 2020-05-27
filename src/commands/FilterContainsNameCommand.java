@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import models.City;
 import exceptions.InvalidValueException;
 import managers.CollectionManager;
@@ -15,7 +17,7 @@ public class FilterContainsNameCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         ArrayList<City> out = collectionManager.findByName(args[0]);
         if(out.size() == 0) consoleManager.writeln("Элементы с таким именем не найден");
         out.forEach(x-> consoleManager.writeln(x.toString()));

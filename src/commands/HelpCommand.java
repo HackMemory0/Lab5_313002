@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import managers.CollectionManager;
 import managers.CommandsManager;
 import managers.ConsoleManager;
@@ -14,7 +16,7 @@ public class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
 
         List<AbstractCommand> aCommands = CommandsManager.getInstance().getAllCommands();
         for (AbstractCommand cmd: aCommands){

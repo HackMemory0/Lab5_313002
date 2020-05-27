@@ -1,5 +1,6 @@
 package managers;
 
+import database.Credentials;
 import models.City;
 import models.Coordinates;
 import models.Government;
@@ -15,6 +16,7 @@ import java.io.Writer;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
@@ -59,6 +61,13 @@ public class ConsoleManager {
         return scanner.hasNextLine();
     }
 
+    public Credentials getCredentials(){
+        String username = readWithMessage("Логин: ", false);
+        String password = readWithMessage("Пароль: ", false);
+
+        return new Credentials(-1, username, password);
+    }
+
     /**
      * получает введенные данные объектом
      * @return
@@ -89,7 +98,7 @@ public class ConsoleManager {
         Government government = getGoverment();
         Human human = getHuman();
 
-        return new City(name, coord, area, population, metersAboveSeaLevel, timezone, capital, government, human);
+        return new City(-1L, name, coord, LocalDate.now(), area, population, metersAboveSeaLevel, timezone, capital, government, human);
     }
 
 

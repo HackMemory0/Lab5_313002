@@ -4,6 +4,7 @@ import commands.AbstractCommand;
 import commands.ExecuteScriptCommand;
 import commands.ExitCommand;
 import commands.SaveCommand;
+import database.Credentials;
 import exceptions.InvalidValueException;
 import exceptions.NoCommandException;
 import exceptions.SelfCallingScriptException;
@@ -73,7 +74,7 @@ public class Client {
     public void run() throws IOException, ClassNotFoundException, InterruptedException {
         consoleManager = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
 
-        while (true) {
+        /*while (true) {
             consoleManager.write("Введите имя: ");
             if(consoleManager.hasNextLine()) {
                 String str = consoleManager.read();
@@ -85,7 +86,9 @@ public class Client {
                     if(isLogin) break;
                 }
             }
-        }
+        }*/
+
+        isConnected = true;
 
 
         tryConnect = 1;
@@ -148,7 +151,7 @@ public class Client {
             }
             else {
                 if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(cMgr));
-                send(cmd);
+                send(new CommandPacket(cmd, new Credentials(1, "root", "toor")));
                 objectHandler(recv());
             }
         }catch (NoCommandException ex) {

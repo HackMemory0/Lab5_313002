@@ -1,6 +1,7 @@
 package network;
 
 import commands.AbstractCommand;
+import database.*;
 import exceptions.InvalidValueException;
 import lombok.extern.slf4j.Slf4j;
 import managers.CollectionManager;
@@ -16,6 +17,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -45,6 +47,8 @@ public class Server {
     private CollectionManager collectionManager;
     private ConsoleManager consoleManager;
 
+    private DatabaseController databaseController;
+
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         new Server(args).run();
@@ -72,7 +76,7 @@ public class Server {
 
                 this.stopServer();
                 channel.disconnect();
-                collectionManager.save();
+                //collectionManager.save();
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -88,10 +92,20 @@ public class Server {
         channel.configureBlocking(false);
         channel.socket().bind(new InetSocketAddress(port));
 
-        collectionManager = new CollectionManager(AppConstant.FILE_PATH);
-        consoleManager = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(outputStream), false);
+        DBConfigure dbConfigure = new DBConfigure();
+        dbConfigure.connect();
 
-        log.info("Server started. Listening port {}", port);
+        CollectionDBManager collectionDBManager = new CollectionDBManager(dbConfigure.getDbConnection());
+        UserDBManager userDBManager = new UserDBManager();
+        databaseController = new DatabaseController(collectionDBManager, userDBManager);
+
+        try {
+            collectionManager = new CollectionManager(collectionDBManager.getCollection());
+            consoleManager = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(outputStream), false);
+            log.info("Server started. Listening port {}", port);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void stopServer(){
@@ -105,24 +119,6 @@ public class Server {
 
         SelectionKey clientKey = channel.register(selector, SelectionKey.OP_READ);
         clientKey.attach(new Con());
-
-
-        /*ConsoleManager cm = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
-        new Thread(() -> {
-            while(true) {
-                if (cm.hasNextLine()) {
-                    try {
-                        String cmd = cm.read();
-                        CommandsManager.getInstance().execute(cmd, cm, collectionManager);
-                        cm.writeln("");
-                    }catch (Exception ex){
-                        cm.writeln(ex.getMessage());
-                    }
-                }
-            }
-        }).start();*/
-
-
 
         while(isRunning){
             try {
@@ -195,10 +191,10 @@ public class Server {
                 log.info("User disconnected " + ((LogoutPacket) obj).getNick() + ": " + client);
             }
 
-        }else if(obj instanceof AbstractCommand){
+        }else if(obj instanceof CommandPacket){
             outputStream.reset();
             try {
-                ((AbstractCommand) obj).execute(consoleManager, collectionManager);
+                ((CommandPacket) obj).getCommand().execute(consoleManager, collectionManager, databaseController, ((CommandPacket) obj).getCredentials());
                 outObj = new CommandExecutionPacket(new String(outputStream.toByteArray()));
             }catch (InvalidValueException ex){
                 outObj = new CommandExecutionPacket(ex.getMessage());

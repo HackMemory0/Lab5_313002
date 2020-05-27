@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import managers.CollectionManager;
 import managers.ConsoleManager;
 
@@ -11,7 +13,7 @@ public class ExitCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         /*if(consoleManager.getIsScript()) System.exit(1);
 
         String out = consoleManager.readWithMessage("Вы уверены? Данные не сохраняются (Y/N)", false);

@@ -1,5 +1,7 @@
 package commands;
 
+import database.Credentials;
+import database.DatabaseController;
 import models.City;
 import exceptions.InvalidValueException;
 import managers.CollectionManager;
@@ -19,7 +21,7 @@ public class UpdateIdCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager) {
+    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         long id;
         try {
             id = Long.parseLong(args[0]);
