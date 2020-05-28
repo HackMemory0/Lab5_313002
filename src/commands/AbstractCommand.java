@@ -24,7 +24,7 @@ public abstract class AbstractCommand implements Serializable {
      * @param consoleManager управление консолью
      * @param collectionManager управление коллекцией
      */
-    public abstract void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials);
+    public abstract Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials);
 
     public Object getInput(ConsoleManager consoleManager){
         return null;

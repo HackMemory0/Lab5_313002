@@ -3,6 +3,7 @@ package network;
 import commands.AbstractCommand;
 import database.*;
 import exceptions.InvalidValueException;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import managers.CollectionManager;
 import managers.CommandsManager;
@@ -96,7 +97,7 @@ public class Server {
         dbConfigure.connect();
 
         CollectionDBManager collectionDBManager = new CollectionDBManager(dbConfigure.getDbConnection());
-        UserDBManager userDBManager = new UserDBManager();
+        UserDBManager userDBManager = new UserDBManager(dbConfigure.getDbConnection());
         databaseController = new DatabaseController(collectionDBManager, userDBManager);
 
         try {
@@ -176,7 +177,10 @@ public class Server {
 
     private Object objectHandler(Object obj, SocketAddress client) throws IOException {
         Object outObj = null;
-        if(obj instanceof LoginPacket) {
+        if(obj instanceof String){
+            outObj = obj;
+        }
+        else if(obj instanceof LoginPacket) {
             if (!clients.containsKey(((LoginPacket) obj).getNick())) {
                 clients.put(((LoginPacket) obj).getNick(), client);
                 outObj = new LoginSuccessPacket("Connected");
@@ -194,8 +198,18 @@ public class Server {
         }else if(obj instanceof CommandPacket){
             outputStream.reset();
             try {
-                ((CommandPacket) obj).getCommand().execute(consoleManager, collectionManager, databaseController, ((CommandPacket) obj).getCredentials());
-                outObj = new CommandExecutionPacket(new String(outputStream.toByteArray()));
+
+
+                Object retObj = ((CommandPacket) obj).getCommand().execute(consoleManager, collectionManager, databaseController, ((CommandPacket) obj).getCredentials());
+                if(retObj instanceof Credentials){
+                    outObj = new CommandExecutionPacket(retObj);
+                }else if(retObj != null){
+                    outObj = new CommandExecutionPacket(retObj);
+                }else {
+                    outObj = new CommandExecutionPacket(new String(outputStream.toByteArray()));
+                }
+
+
             }catch (InvalidValueException ex){
                 outObj = new CommandExecutionPacket(ex.getMessage());
             }

@@ -19,7 +19,7 @@ public class CollectionManager {
     private Cities citiesArray;
     private File xmlCollection;
     private Long maxId = 0L;
-    private ArrayList<City> collection;
+    private List<City> collection;
 
     /**
      * Класс, который работает с коллекцией
@@ -52,7 +52,7 @@ public class CollectionManager {
 
     public CollectionManager(ArrayList<City> collection){
         this.initDate = LocalDate.now();
-        this.collection = collection;
+        this.collection = Collections.synchronizedList(collection);
         this.maxId = (long) (collection.size() + 1);
     }
 
@@ -114,9 +114,14 @@ public class CollectionManager {
      * удаляет элемент коллекции
      * @param id
      */
-    public void remove(long id){
-        Map.Entry<Integer,City> entry = findById(id).entrySet().iterator().next();
-        this.getCityCollection().remove(entry.getValue());
+    public boolean remove(long id){
+        if(this.checkIdExist(id)) {
+            Map.Entry<Integer, City> entry = findById(id).entrySet().iterator().next();
+            this.getCityCollection().remove(entry.getValue());
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -124,20 +129,25 @@ public class CollectionManager {
      * @param city
      * @param id
      */
-    public void update(City city, Long id){
-        Map.Entry<Integer,City> entry = findById(id).entrySet().iterator().next();
-        City updCity = entry.getValue();
-        updCity.setName(city.getName());
-        updCity.setArea(city.getArea());
-        updCity.setCapital(city.getCapital());
-        updCity.setGovernment(city.getGovernment());
-        updCity.setGovernor(city.getGovernor());
-        updCity.setCoordinates(city.getCoordinates());
-        updCity.setTimezone(city.getTimezone());
-        updCity.setPopulation(city.getPopulation());
-        updCity.setMetersAboveSeaLevel(city.getMetersAboveSeaLevel());
+    public boolean update(City city, Long id){
+        if(this.checkIdExist(id)) {
+            Map.Entry<Integer, City> entry = findById(id).entrySet().iterator().next();
+            City updCity = entry.getValue();
+            updCity.setName(city.getName());
+            updCity.setArea(city.getArea());
+            updCity.setCapital(city.getCapital());
+            updCity.setGovernment(city.getGovernment());
+            updCity.setGovernor(city.getGovernor());
+            updCity.setCoordinates(city.getCoordinates());
+            updCity.setTimezone(city.getTimezone());
+            updCity.setPopulation(city.getPopulation());
+            updCity.setMetersAboveSeaLevel(city.getMetersAboveSeaLevel());
 
-        this.getCityCollection().set(entry.getKey(), updCity);
+            this.getCityCollection().set(entry.getKey(), updCity);
+            return true;
+        }
+
+        return false;
     }
 
     public boolean checkIdExist(Long id){
@@ -277,7 +287,7 @@ public class CollectionManager {
 
 
 
-    public ArrayList<City> getCityCollection() {
+    public List<City> getCityCollection() {
         return collection;
     }
 

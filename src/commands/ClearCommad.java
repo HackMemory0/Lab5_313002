@@ -12,8 +12,16 @@ public class ClearCommad extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
-        collectionManager.clear();
-        consoleManager.writeln("Коллекция была очищена");
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+
+        String retDelAll = databaseController.clearCity(credentials);
+        if (retDelAll == null) {
+            collectionManager.clear();
+            consoleManager.writeln("All elements deleted");
+        }else{
+            consoleManager.writeln("Problem: " + retDelAll);
+        }
+
+        return null;
     }
 }

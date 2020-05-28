@@ -13,8 +13,10 @@ public class SaveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         collectionManager.save();
         consoleManager.writeln("Коллекция была сохранена.");
+
+        return null;
     }
 }

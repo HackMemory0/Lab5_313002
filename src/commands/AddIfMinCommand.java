@@ -20,7 +20,7 @@ public class AddIfMinCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         if(needInput && inputData == null) inputData = this.getInput(consoleManager);
         Boolean res = collectionManager.addIfMin((City) inputData);
 
@@ -30,5 +30,7 @@ public class AddIfMinCommand extends AbstractCommand {
             consoleManager.writeln("Элемент не был добавлен. Элемент оказался больше минимального");
 
         inputData = null;
+
+        return null;
     }
 }

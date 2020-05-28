@@ -24,7 +24,7 @@ public class ExecuteScriptCommand extends AbstractCommand {
 
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
 
         executeFault = false;
         Path pathToScript = Paths.get(args[0]);
@@ -46,5 +46,7 @@ public class ExecuteScriptCommand extends AbstractCommand {
             executeFault = true;
             consoleManager.writeln("Стек переполнен, выполнение прервано");
         }
+
+        return null;
     }
 }

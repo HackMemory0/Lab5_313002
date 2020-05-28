@@ -13,7 +13,9 @@ public class PrintFieldAscendingTimezoneCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         collectionManager.sortByTimezone().forEach(x->consoleManager.writeln(x.toString()));
+
+        return null;
     }
 }

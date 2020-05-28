@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import network.Client;
 import network.Server;
@@ -9,7 +10,7 @@ import network.Server;
  * Главный класс приложения
  */
 
-@Slf4j
+
 public class Main {
 
 

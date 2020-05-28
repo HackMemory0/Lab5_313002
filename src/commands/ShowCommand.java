@@ -13,11 +13,13 @@ public class ShowCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
-        consoleManager.writeln("Количество элементов в коллекции: " + collectionManager.getCityCollection().size());
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+        consoleManager.writeln("Count: " + collectionManager.getCityCollection().size());
         StringBuilder sb = new StringBuilder();
         collectionManager.getCityCollection().forEach(s -> sb.append(s).append("\n"));
 
         consoleManager.writeln(sb.toString());
+
+        return null;
     }
 }

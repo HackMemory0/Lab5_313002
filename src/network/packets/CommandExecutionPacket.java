@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class CommandExecutionPacket implements Serializable {
 
-    private final String message;
-    public CommandExecutionPacket(String message){
+    private final Object message;
+    public CommandExecutionPacket(Object message){
         this.message = message;
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 }

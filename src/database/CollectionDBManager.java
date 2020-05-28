@@ -72,7 +72,7 @@ public class CollectionDBManager {
             preparedStatement.setLong(5, city.getMetersAboveSeaLevel());
             preparedStatement.setDouble(6, city.getTimezone());
             preparedStatement.setBoolean(7, city.getCapital());
-            preparedStatement.setInt(8, city.getGovernment().getId());
+            preparedStatement.setInt(8, city.getGovernment().getId() + 1);
             ResultSet rs = preparedStatement.executeQuery();
             int cityID = 0;
             if (rs.next())
@@ -108,7 +108,7 @@ public class CollectionDBManager {
 
     public String update(int id, City city, Credentials credentials) throws SQLException {
         if (!hasPermissions(credentials, id))
-            return "You have no permissions to edit this dragon";
+            return "You don't have permissions";
 
         final boolean oldAutoCommit = connection.getAutoCommit();
         try {
@@ -116,13 +116,13 @@ public class CollectionDBManager {
 
             PreparedStatement preparedStatement = connection.prepareStatement(SqlQuery.Update.CITY);
             preparedStatement.setString(1, city.getName());
-            preparedStatement.setTimestamp(2, Timestamp.valueOf(city.getCreationDate().toString()));
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(city.getCreationDate().atStartOfDay()));
             preparedStatement.setDouble(3, city.getArea());
             preparedStatement.setLong(4, city.getPopulation());
             preparedStatement.setLong(5, city.getMetersAboveSeaLevel());
             preparedStatement.setDouble(6, city.getTimezone());
             preparedStatement.setBoolean(7, city.getCapital());
-            preparedStatement.setInt(8, city.getGovernment().getId());
+            preparedStatement.setInt(8, city.getGovernment().getId() + 1);
             preparedStatement.setInt(9, id);
             preparedStatement.executeUpdate();
 
@@ -160,7 +160,7 @@ public class CollectionDBManager {
 
     public String deleteAll(Credentials credentials) throws SQLException {
         if (!credentials.username.equals(UserDBManager.ROOT_USERNAME))
-            return "You have no permissions to delete all dragons";
+            return "You don't have permissions to delete all database, only root";
 
         final boolean oldAutoCommit = connection.getAutoCommit();
         try {
@@ -183,7 +183,7 @@ public class CollectionDBManager {
         try {
             int dragonID = getCityByID(id);
             if (!hasPermissions(credentials, dragonID))
-                return "You have no permissions to delete this dragon";
+                return "You don't have permissions";
 
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(SqlQuery.Delete.CITY_BY_ID);

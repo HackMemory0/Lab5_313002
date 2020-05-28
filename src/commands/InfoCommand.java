@@ -13,9 +13,11 @@ public class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         consoleManager.writeln("Type; " + collectionManager.getCityCollection().getClass().getName());
         consoleManager.writeln("Count: " + collectionManager.getCityCollection().size());
         consoleManager.writeln("Init date: " + collectionManager.getInitDate().toString());
+
+        return null;
     }
 }

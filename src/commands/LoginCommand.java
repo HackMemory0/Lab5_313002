@@ -19,11 +19,10 @@ public class LoginCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
-        if(needInput && inputData == null) inputData = this.getInput(consoleManager);
-
-        consoleManager.writeln(inputData.toString());
-
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+        Object _credentials = databaseController.login((Credentials) this.inputData);
         inputData = null;
+
+        return _credentials;
     }
 }

@@ -19,7 +19,7 @@ public class RemoveLowerCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         if(needInput && inputData == null) inputData = this.getInput(consoleManager);
 
         int initSize = collectionManager.getCityCollection().size();
@@ -29,5 +29,7 @@ public class RemoveLowerCommand extends AbstractCommand {
         consoleManager.writeln("Было удалено " + (initSize - afterSize) + " элементов");
 
         inputData = null;
+
+        return null;
     }
 }

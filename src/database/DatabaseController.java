@@ -2,6 +2,7 @@ package database;
 
 import models.City;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -21,6 +22,32 @@ public class DatabaseController {
             throw new SQLException("It was not possible to fetch the collection from database");
         return collection;
     }
+
+    public Object login(Credentials credentials) {
+        try {
+            int id = userDBManager.checkUserAndGetID(credentials);
+            if (id > 0)
+                return new Credentials(id, credentials.username, credentials.password);
+            else
+                return "User/Password given not found or incorrect";
+        } catch (SQLException | NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+    }
+
+    public Object register(Credentials credentials) {
+        try {
+            int id = userDBManager.registerUser(credentials);
+            if (id > 0)
+                return new Credentials(id, credentials.username, credentials.password);
+            else
+                return credentials;
+        } catch (Throwable ex) {
+            return ex.getMessage();
+        }
+    }
+
 
 
     public String addCity(City city, Credentials credentials) {

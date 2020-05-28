@@ -21,21 +21,26 @@ public class UpdateIdCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
-        long id;
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+        int id;
         try {
-            id = Long.parseLong(args[0]);
+            id = Integer.parseInt(args[0]);
         } catch (Exception e) {
-            throw new InvalidValueException("Неверный тип данных");
+            throw new InvalidValueException("Format error");
         }
 
-        if(!collectionManager.checkIdExist(id))
-            throw new InvalidValueException("Такого id не существует");
-
-        if(needInput && inputData == null) inputData = this.getInput(consoleManager);
-        collectionManager.update((City) inputData, id);
-        consoleManager.writeln("Элемент с id - " + id + " был изменен");
+        String cityID = databaseController.updateCity(id, (City) inputData, credentials);
+        if (cityID == null) {
+            if(collectionManager.update((City) inputData, (long)id))
+                consoleManager.writeln("Element with id(" + id + ") - edited");
+            else
+                consoleManager.writeln("Element with id(" + id + ") - doesn't");
+        } else {
+            consoleManager.writeln("Have some problems: " + cityID);
+        }
 
         inputData = null;
+
+        return null;
     }
 }

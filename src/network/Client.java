@@ -1,13 +1,13 @@
 package network;
 
-import commands.AbstractCommand;
-import commands.ExecuteScriptCommand;
-import commands.ExitCommand;
-import commands.SaveCommand;
+import commands.*;
 import database.Credentials;
+import database.UserDBManager;
+import exceptions.AuthException;
 import exceptions.InvalidValueException;
 import exceptions.NoCommandException;
 import exceptions.SelfCallingScriptException;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import managers.CommandsManager;
 import managers.ConsoleManager;
@@ -20,6 +20,7 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 @Slf4j
@@ -27,6 +28,7 @@ public class Client {
     private HashSet<String> executePaths = new HashSet<>();
     private boolean executeFault = false;
     private int executeCount = 0;
+
 
     private DatagramSocket socket;
     private InetAddress IPAddress;
@@ -36,6 +38,7 @@ public class Client {
     private boolean isConnected = false;
     private boolean isLogin = false;
     private int tryConnect = 2;
+    private Credentials credentials = new Credentials(-1, "default", "");
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         new Client(args).run();
@@ -47,6 +50,7 @@ public class Client {
 
     private void connect(String host, int port) throws IOException {
         PORT = port;
+
         IPAddress = InetAddress.getByName( host );
         socket = new DatagramSocket();
         socket.setSoTimeout(3000);
@@ -109,19 +113,15 @@ public class Client {
         try {
             AbstractCommand cmd = CommandsManager.getInstance().parseCommand(sCmd);
             if(cmd instanceof ExitCommand){ send(new LogoutPacket(this.userPacket)); socket.disconnect(); isConnected = false; }
-            else if(cmd instanceof SaveCommand){ cMgr.writeln("Команда не работает в клиентской части."); }
+            else if(cmd instanceof HelpCommand) {
+                cmd.execute(consoleManager, null, null, credentials);
+            }
             else if(cmd instanceof ExecuteScriptCommand){
 
+                if(credentials.username.equals(UserDBManager.DEFAULT_USERNAME)) throw new AuthException("Пожалуйста, авторизуйтесь");
                 executeCount++;
                 if(executeCount == 127) throw new StackOverflowError();
-                /*if(executePaths.contains(cmd.getArgs()[0])) {
-                    executeFault = true;
-                    throw new SelfCallingScriptException("Рекурсивный вызов запрещен");
-                }*/
-
                 Path pathToScript = Paths.get(cmd.getArgs()[0]);
-                //executePaths.add(cmd.getArgs()[0]);
-
                 int lineNum = 1;
                 try {
                     cMgr = new ConsoleManager(new FileReader(pathToScript.toFile()), new OutputStreamWriter(System.out), true);
@@ -150,8 +150,14 @@ public class Client {
 
             }
             else {
+                if(credentials.username.equals(UserDBManager.DEFAULT_USERNAME)
+                && !(cmd instanceof LoginCommand)
+                && !(cmd instanceof RegisterCommand))
+                    throw new AuthException("Пожалуйста, авторизуйтесь");
+
+
                 if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(cMgr));
-                send(new CommandPacket(cmd, new Credentials(1, "root", "toor")));
+                send(new CommandPacket(cmd, credentials));
                 objectHandler(recv());
             }
         }catch (NoCommandException ex) {
@@ -160,7 +166,7 @@ public class Client {
         }catch (NumberFormatException|ClassCastException ex){
             cMgr.writeln("Ошибка во время каста\n" + ex.getMessage());
             log.error(ex.getMessage());
-        } catch (InvalidValueException ex){
+        } catch (InvalidValueException | AuthException ex){
             cMgr.writeln(ex.getMessage());
             log.error(ex.getMessage());
         }
@@ -169,16 +175,14 @@ public class Client {
 
     private void objectHandler(Object obj){
         if(obj != null) {
-            if (obj instanceof LoginSuccessPacket) {
-                isConnected = true;
-                isLogin = true;
-                consoleManager.writeln(((LoginSuccessPacket) obj).getMessage());
-            } else if (obj instanceof LoginFailedPacket) {
-                isConnected = true;
-                isLogin = false;
-                consoleManager.writeln(((LoginFailedPacket) obj).getMessage());
-            } else if (obj instanceof CommandExecutionPacket) {
-                consoleManager.writeln(((CommandExecutionPacket) obj).getMessage());
+            if (obj instanceof CommandExecutionPacket) {
+                Object recObj = ((CommandExecutionPacket) obj).getMessage();
+                if(recObj instanceof Credentials){
+                    credentials = (Credentials) recObj;
+                    log.info("user log in as: " + ((Credentials) recObj).username);
+                }else {
+                    consoleManager.writeln(recObj.toString());
+                }
             }
         }
     }

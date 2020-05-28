@@ -31,13 +31,13 @@ public class CommandsManager {
         addCommand(new UpdateIdCommand());
         addCommand(new RemoveIdCommand());
         addCommand(new ClearCommad());
-        addCommand(new ShuffleCommand());
-        addCommand(new AddIfMinCommand());
+        //addCommand(new ShuffleCommand());
+        //addCommand(new AddIfMinCommand());
         addCommand(new CountLessThanGovernor());
         addCommand(new FilterContainsNameCommand());
-        addCommand(new RemoveLowerCommand());
+        //addCommand(new RemoveLowerCommand());
         addCommand(new PrintFieldAscendingTimezoneCommand());
-        addCommand(new SaveCommand());
+        //addCommand(new SaveCommand());
         addCommand(new ExecuteScriptCommand());
     }
 

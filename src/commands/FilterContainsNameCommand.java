@@ -17,9 +17,11 @@ public class FilterContainsNameCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         ArrayList<City> out = collectionManager.findByName(args[0]);
-        if(out.size() == 0) consoleManager.writeln("Элементы с таким именем не найден");
+        if(out.size() == 0) consoleManager.writeln("Records doesn't exist");
         out.forEach(x-> consoleManager.writeln(x.toString()));
+
+        return null;
     }
 }

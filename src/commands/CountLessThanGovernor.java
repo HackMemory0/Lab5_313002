@@ -19,11 +19,13 @@ public class CountLessThanGovernor extends AbstractCommand {
     }
 
     @Override
-    public void execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
+    public Object execute(ConsoleManager consoleManager, CollectionManager collectionManager, DatabaseController databaseController, Credentials credentials) {
         if(needInput && inputData == null) inputData = this.getInput(consoleManager);
         long count = collectionManager.countLessThanGovernor((Human) inputData);
-        consoleManager.writeln("Кол-во элементов, которые меньше заданого governor: " + count);
+        consoleManager.writeln("Count elements less than governor: " + count);
 
         inputData = null;
+
+        return null;
     }
 }
