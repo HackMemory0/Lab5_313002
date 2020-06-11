@@ -5,7 +5,6 @@ CREATE TABLE goverment_types (
 
 CREATE TABLE city (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     creation_date TIMESTAMP NOT NULL,
     area FLOAT NULL,
@@ -14,6 +13,8 @@ CREATE TABLE city (
 	timezone FLOAT NULL,
     capital BOOLEAN NULL,
     goverment INT NOT NULL,
+    user_id INT NOT NULL,
+    username VARCHAR(255) NOT NULL,
     FOREIGN KEY (goverment) REFERENCES goverment_types(id)
 );
 

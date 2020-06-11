@@ -142,9 +142,18 @@ public class NetworkManager implements Runnable {
     public void update(Long id, City city, EventListener event){
         this.updateEvent = event;
 
-        UpdateIdCommand lc = new UpdateIdCommand();
-        lc.setInputData(city);
-        this.send(lc);
+        UpdateIdCommand uic = new UpdateIdCommand();
+        uic.setArgs(new String[]{id.toString()});
+        uic.setInputData(city);
+        this.send(uic);
+    }
+
+    public void add(City city, EventListener event){
+        this.addEvent = event;
+
+        AddCommand ac = new AddCommand();
+        ac.setInputData(city);
+        this.send(ac);
     }
 
 
