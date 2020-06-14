@@ -12,7 +12,7 @@
     </padding>
     <StackPane>
         <VBox prefHeight="256.0" prefWidth="489.0" spacing="10.0">
-            <Label prefHeight="46.0" prefWidth="269.0" text="%key.welcome">
+            <Label fx:id="welcome_lb" prefHeight="46.0" prefWidth="269.0" text="%key.welcome">
                 <font>
                     <Font size="30.0"/>
                 </font>
@@ -28,13 +28,13 @@
                     <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
                     <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <Label prefHeight="21.0" prefWidth="277.0" text="%key.userText" GridPane.columnIndex="0"
+                <Label fx:id="user_text_lb" prefHeight="21.0" prefWidth="277.0" text="%key.userText" GridPane.columnIndex="0"
                        GridPane.rowIndex="0">
                     <GridPane.margin>
                         <Insets left="5.0"/>
                     </GridPane.margin>
                 </Label>
-                <Label prefHeight="21.0" prefWidth="265.0" text="%key.passwordText" GridPane.columnIndex="0"
+                <Label fx:id="password_text_lb" prefHeight="21.0" prefWidth="265.0" text="%key.passwordText" GridPane.columnIndex="0"
                        GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="5.0"/>

@@ -3,10 +3,7 @@ package ru.ifmo.lab.ui.controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ru.ifmo.lab.models.City;
 import ru.ifmo.lab.models.Coordinates;
@@ -38,6 +35,18 @@ public class AddUpdateView implements Initializable {
     public ComboBox goverment_cb;
     public TextField governor_tb;
     public Button add_btn;
+    public Label id_lb;
+    public Label name_lb;
+    public Label x_lb;
+    public Label y_lb;
+    public Label date_lb;
+    public Label area_lb;
+    public Label population_lb;
+    public Label mas_lb;
+    public Label timezone_lb;
+    public Label capital_lb;
+    public Label goverment_lb;
+    public Label governor_lb;
     private ResourceBundle resources;
 
 
@@ -133,12 +142,31 @@ public class AddUpdateView implements Initializable {
             capital_cb.getSelectionModel().select(Boolean.valueOf(currentCity.isCapital()).toString());
             goverment_cb.getSelectionModel().select(currentCity.getGovernment());
             governor_tb.setText(Integer.valueOf(currentCity.getGovernor()).toString());
+        }else {
+            id_tb.setManaged(false);
+            id_lb.setManaged(false);
+            date_tb.setManaged(false);
+            date_lb.setManaged(false);
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
+
+        id_lb.textProperty().bind(I18N.createStringBinding("key.id"));
+        name_lb.textProperty().bind(I18N.createStringBinding("key.name"));
+        x_lb.textProperty().bind(I18N.createStringBinding("key.x"));
+        y_lb.textProperty().bind(I18N.createStringBinding("key.y"));
+        date_lb.textProperty().bind(I18N.createStringBinding("key.date"));
+        area_lb.textProperty().bind(I18N.createStringBinding("key.area"));
+        population_lb.textProperty().bind(I18N.createStringBinding("key.population"));
+        mas_lb.textProperty().bind(I18N.createStringBinding("key.mas"));
+        timezone_lb.textProperty().bind(I18N.createStringBinding("key.timezone"));
+        capital_lb.textProperty().bind(I18N.createStringBinding("key.capital"));
+        goverment_lb.textProperty().bind(I18N.createStringBinding("key.goverment"));
+        governor_lb.textProperty().bind(I18N.createStringBinding("key.governor"));
+
         capital_cb.getItems().removeAll(capital_cb.getItems());
         capital_cb.getItems().addAll("true", "false");
         goverment_cb.getItems().removeAll(goverment_cb.getItems());

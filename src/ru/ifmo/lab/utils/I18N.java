@@ -34,7 +34,7 @@ public final class I18N {
      * @return List of Locale objects.
      */
     public static List<Locale> getSupportedLocales() {
-        return new ArrayList<>(Arrays.asList(Locale.ENGLISH));
+        return new ArrayList<>(Arrays.asList(Locale.ENGLISH, new Locale("ru_RU")));
     }
 
     /**

@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-main-Class: ru.ifmo.lab.network.ClientMain
+Main-Class: ru.ifmo.lab.ui.ClientMainLauncher
 
