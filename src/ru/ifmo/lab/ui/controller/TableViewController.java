@@ -279,6 +279,10 @@ public class TableViewController implements Initializable {
             }
         };
 
+        show();
+    }
+
+    public void show(){
         NetworkManager.getInstance().show(showEvent);
     }
 

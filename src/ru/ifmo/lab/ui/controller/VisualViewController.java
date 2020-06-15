@@ -1,12 +1,20 @@
 package ru.ifmo.lab.ui.controller;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -17,6 +25,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.util.Pair;
 import ru.ifmo.lab.models.City;
 import ru.ifmo.lab.ui.ClientMainLauncher;
@@ -48,11 +57,37 @@ public class VisualViewController implements Initializable {
 
     private Tooltip tooltip;
 
-    //TODO add context menu, localize all labels
+    //TODO add context menu, localize all labels, color circles by name
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
         tooltip = new Tooltip();
+
+        javafx.scene.control.MenuItem add = new MenuItem();
+        add.textProperty().bind(I18N.createStringBinding("key.add"));
+        add.setOnAction(event1 -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("views/AddUpdateView.fxml"), resources);
+                Parent root = loader.load();
+                AddUpdateView addUpdateView = loader.getController();
+                addUpdateView.transferData(null, false);
+
+                Stage stage = new Stage();
+                stage.setResizable(false);
+
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(getClass().getClassLoader().getResource("styles/light.css").toExternalForm());
+                stage.setScene(scene);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.titleProperty().bind(I18N.createStringBinding("key.add"));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        ContextMenu contextMenu = new ContextMenu(add);
+        map_img.setOnContextMenuRequested(e -> contextMenu.show(map_img, e.getScreenX(), e.getScreenY()));
 
         showEvent = new EventListener() {
             @Override
@@ -111,13 +146,21 @@ public class VisualViewController implements Initializable {
 
         double x_coord = city.getCoordinates().getX() % panelSize.width + panelSize.width +  10.0;
         double y_coord = city.getCoordinates().getY() % panelSize.height + panelSize.height + 10.0;
+
+        int red = city.getUsername().hashCode()*67%255;
+        int green = city.getUsername().hashCode()*54%255;
+        int blue = city.getUsername().hashCode()*78%255;
+
+
         Circle circle = new Circle();
+        circle.setFill(Color.rgb(red, green, blue));
         circle.setCenterX(x_coord);
         circle.setCenterY(y_coord);
         circle.setRadius(diam);
         circle.setCursor(Cursor.HAND);
-        circle.setFill(Color.RED);
         circle.setUserData(city);
+
+
 
         circle.setOnMouseEntered(event -> {
             Circle self = (Circle) event.getSource();
@@ -204,7 +247,14 @@ public class VisualViewController implements Initializable {
         if(circle != null) {
             circle.setCenterX(x_coord);
             circle.setCenterY(y_coord);
-            circle.setRadius(diam);
+            circle.setUserData(city);
+
+            Timeline timeline = new Timeline();
+            KeyValue keyRadius = new KeyValue(circle.radiusProperty(), diam);
+            Duration duration = Duration.millis(2000);
+            KeyFrame keyFrame = new KeyFrame(duration, event -> {} , keyRadius);
+            timeline.getKeyFrames().add(keyFrame);
+            timeline.play();
 
             circleHashMap.put(id, circle);
         }

@@ -84,6 +84,8 @@ public class MainViewController implements Initializable {
         menu_user.textProperty().bind(I18N.createStringBinding("key.user_Text"));
         menu_settings.textProperty().bind(I18N.createStringBinding("key.settingsText"));
         logout.textProperty().bind(I18N.createStringBinding("key.logoutText"));
+        toggleTable.textProperty().bind(I18N.createStringBinding("key.table"));
+        toggleVisual.textProperty().bind(I18N.createStringBinding("key.visual"));
 
         switchPanes();
         toggleTable.setSelected(true);
@@ -104,6 +106,7 @@ public class MainViewController implements Initializable {
             if(visualViewInit) mainPane.getChildren().remove(visualPane);
             NetworkManager.getInstance().showEvent = tableViewController.showEvent;
             mainPane.getChildren().add(tablePane);
+            tableViewController.show();
 
             tableViewInit = true;
             visualViewInit = false;

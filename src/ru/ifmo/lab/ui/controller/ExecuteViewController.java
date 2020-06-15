@@ -11,6 +11,7 @@ import ru.ifmo.lab.commands.ExecuteScriptCommand;
 import ru.ifmo.lab.network.CommandReader;
 import ru.ifmo.lab.ui.NetworkManager;
 import ru.ifmo.lab.ui.listener.EventListener;
+import ru.ifmo.lab.utils.I18N;
 
 import java.io.File;
 import java.net.URL;
@@ -35,6 +36,7 @@ public class ExecuteViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        file_path_tb.promptTextProperty().bind(I18N.createStringBinding("key.file_path"));
         CommandReader.getInstance().executeEvent =
         NetworkManager.getInstance().addEvent =
                 NetworkManager.getInstance().updateEvent =
