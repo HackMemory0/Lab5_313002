@@ -153,7 +153,7 @@ public class ClientHandler extends Thread {
                 if(((CommandExecutionPacket) obj).getSuccessful())
                     NetworkManager.getInstance().infoEvent.onResponse(resObj);
                 else NetworkManager.getInstance().infoEvent.onError(resObj);
-            }else if("ClearCommand".equals(msgType)){
+            }else if("ClearCommad".equals(msgType)){
                 if(((CommandExecutionPacket) obj).getSuccessful())
                     NetworkManager.getInstance().clearEvent.onResponse(resObj);
                 else NetworkManager.getInstance().clearEvent.onError(resObj);

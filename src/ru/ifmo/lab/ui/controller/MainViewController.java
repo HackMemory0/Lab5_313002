@@ -96,11 +96,13 @@ public class MainViewController implements Initializable {
         });
     }
 
+
     private void switchPanes(){
         if(!tableViewInit) {
             HBox.setHgrow(tablePane, Priority.ALWAYS);
             tablePane.setFillWidth(true);
             if(visualViewInit) mainPane.getChildren().remove(visualPane);
+            NetworkManager.getInstance().showEvent = tableViewController.showEvent;
             mainPane.getChildren().add(tablePane);
 
             tableViewInit = true;
@@ -109,6 +111,9 @@ public class MainViewController implements Initializable {
             HBox.setHgrow(visualPane, Priority.ALWAYS);
             visualPane.setFillWidth(true);
             if(tableViewInit) mainPane.getChildren().remove(tablePane);
+            visualViewController.map_img.fitWidthProperty().bind(mainPane.widthProperty());
+            NetworkManager.getInstance().showEvent = visualViewController.showEvent;
+            visualViewController.draw(mainPane.getWidth(), mainPane.getHeight());
             mainPane.getChildren().add(visualPane);
 
             tableViewInit = false;
@@ -122,6 +127,8 @@ public class MainViewController implements Initializable {
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getClassLoader().getResource("styles/light.css").toExternalForm());
         ClientMainLauncher.getPrimaryStage().setScene(scene);
+        ClientMainLauncher.getPrimaryStage().setHeight(330);
+        ClientMainLauncher.getPrimaryStage().setWidth(600);
         ClientMainLauncher.getPrimaryStage().setResizable(false);
         ClientMainLauncher.getPrimaryStage().titleProperty().unbind();
         ClientMainLauncher.getPrimaryStage().setTitle("");

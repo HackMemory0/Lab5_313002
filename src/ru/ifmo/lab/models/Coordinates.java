@@ -7,7 +7,7 @@ import java.io.Serializable;
 @XmlType(name = "coordinates")
 @XmlRootElement
 public class Coordinates implements Serializable {
-    private float x;
+    private Float x;
     private Double y; //Значение поля должно быть больше -587, Поле не может быть null
 
     public Coordinates(){}
@@ -17,11 +17,11 @@ public class Coordinates implements Serializable {
         this.y = y;
     }
 
-    public float getX() {
+    public Float getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(Float x) {
         this.x = x;
     }
 

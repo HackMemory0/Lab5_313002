@@ -39,7 +39,9 @@ public class LoginViewController implements Initializable {
                                 Scene scene = new Scene(root);
                                 scene.getStylesheets().add(getClass().getClassLoader().getResource("styles/light.css").toExternalForm());
                                 ClientMainLauncher.getPrimaryStage().setScene(scene);
-                                ClientMainLauncher.getPrimaryStage().setResizable(true);
+                                ClientMainLauncher.getPrimaryStage().setResizable(false);
+                                ClientMainLauncher.getPrimaryStage().setWidth(1400);
+                                ClientMainLauncher.getPrimaryStage().setHeight(700);
                                 ClientMainLauncher.getPrimaryStage().centerOnScreen();
                                 ClientMainLauncher.getPrimaryStage().titleProperty().bind(I18N.createStringBinding("key.login_as", user.getCredentials().username));
                             } catch (IOException e) {

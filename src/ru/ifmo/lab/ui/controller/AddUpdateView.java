@@ -172,9 +172,9 @@ public class AddUpdateView implements Initializable {
         goverment_cb.getItems().removeAll(goverment_cb.getItems());
         goverment_cb.getItems().addAll(Government.values());
 
-        validateRange(x_tb, NumUtil.FLOAT_MIN, NumUtil.FLOAT_MAX, true);
+        validateRange(x_tb, NumUtil.LONG_MIN, NumUtil.LONG_MAX, true);
         validateRange(y_tb, new BigDecimal(-587.0), NumUtil.DOUBLE_MAX, true);
-        validateRange(area_tb, new BigDecimal(0), NumUtil.DOUBLE_MAX, true);
+        validateRange(area_tb, new BigDecimal(0), NumUtil.LONG_MAX, true);
         validateRange(population_tb, new BigDecimal(0), NumUtil.LONG_MAX, false);
         validateRange(timezone_tb, new BigDecimal(-13.0), new BigDecimal(15.0), true);
         validateRange(mas_tb, NumUtil.LONG_MIN, NumUtil.LONG_MAX, false);
@@ -195,7 +195,7 @@ public class AddUpdateView implements Initializable {
                 try {
                     if(tb.getText().matches(isFloat ? decimalPattern : intPattern) && !tb.getText().isEmpty()) {
                         NumberFormat format = NumberFormat.getInstance();
-                        if (!NumUtil.isInRange(format.parse(tb.getText().replace(".", ",")), min, max)) {
+                        if (!NumUtil.isInRange(format.parse(tb.getText().replace(',', '.')), min, max)) {
                             setErrorInput(tb);
                         } else removeErrorInput(tb);
                     }else setErrorInput(tb);

@@ -127,7 +127,6 @@ public class ServerHandler {
                 }
             }
             socket.sendResponse(responseExecution, addressFromClient);
-            //socket.sendResponse(responseExecution, addressFromClient);
             return responseExecution;
         });
 

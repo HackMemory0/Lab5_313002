@@ -188,6 +188,12 @@ public class City implements Comparable, Serializable {
         return sb.toString();
     }
 
+    public boolean compare(City city){
+        return !this.name.equals(city.getName())||!(this.coordinates.getX().compareTo(city.coordinates.getX())==0)||
+                !(this.coordinates.getY().compareTo(city.coordinates.getY())==0)||!this.area.equals(city.area);
+    }
+
+
     @Override
     public int compareTo(Object o) {
         if (o == null) {

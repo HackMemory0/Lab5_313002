@@ -75,6 +75,8 @@ public class TableViewController implements Initializable {
     private boolean filterGovernorIsSelect = false;
     private boolean filterUsernameIsSelect = false;
 
+    public EventListener showEvent;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         search_tb.promptTextProperty().bind(I18N.createStringBinding("key.search"));
@@ -223,11 +225,11 @@ public class TableViewController implements Initializable {
             return row;
         });
 
-        NetworkManager.getInstance().show(new EventListener() {
+        showEvent = new EventListener() {
             @Override
             public void onResponse(Object event) {
                 Platform.runLater(() -> {
-                    if (table_city.getSortOrder().size()>0) {
+                    if (table_city.getSortOrder().size() > 0) {
                         sortcolumn = (TableColumn) table_city.getSortOrder().get(0);
                         st = sortcolumn.getSortType();
                     }
@@ -261,10 +263,9 @@ public class TableViewController implements Initializable {
 
                     table_city.setItems(sortedData);
 
-                    //??????????
                     notifySearchTextField();
 
-                    if (sortcolumn!=null) {
+                    if (sortcolumn != null) {
                         table_city.getSortOrder().add(sortcolumn);
                         sortcolumn.setSortType(st);
                         sortcolumn.setSortable(true);
@@ -276,7 +277,9 @@ public class TableViewController implements Initializable {
             public void onError(Object message) {
 
             }
-        });
+        };
+
+        NetworkManager.getInstance().show(showEvent);
     }
 
     public void onAddClick(ActionEvent actionEvent) {
@@ -317,14 +320,34 @@ public class TableViewController implements Initializable {
         }
     }
 
-    private void showErrorDialog(String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("");
-            alert.setContentText(message);
-            alert.showAndWait();
+    public void onClearAllClick(ActionEvent actionEvent) {
+        NetworkManager.getInstance().clear(new EventListener() {
+            @Override
+            public void onResponse(Object event) {
+                showErrorDialog((String)event);
+            }
+
+            @Override
+            public void onError(Object message) {
+                showErrorDialog((String)message);
+            }
         });
     }
+
+    public void onInfoClick(ActionEvent actionEvent) {
+        NetworkManager.getInstance().info(new EventListener() {
+            @Override
+            public void onResponse(Object event) {
+                showErrorDialog((String)event);
+            }
+
+            @Override
+            public void onError(Object message) {
+
+            }
+        });
+    }
+
 
     public void refreshTableLocale() {
         DateTimeFormatter formatter =
@@ -444,4 +467,14 @@ public class TableViewController implements Initializable {
     public void onHrLang(ActionEvent actionEvent) { I18N.setLocale(new Locale("hr")); refreshTableLocale(); }
 
     public void onEsLang(ActionEvent actionEvent) { I18N.setLocale(new Locale("es_EC")); refreshTableLocale(); }
+
+
+    private void showErrorDialog(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("");
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
+    }
 }

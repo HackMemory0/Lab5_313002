@@ -156,6 +156,20 @@ public class NetworkManager implements Runnable {
         this.send(ac);
     }
 
+    public void clear(EventListener event){
+        this.clearEvent = event;
+
+        ClearCommad cc = new ClearCommad();
+        this.send(cc);
+    }
+
+    public void info(EventListener event){
+        this.infoEvent = event;
+
+        InfoCommand ic = new InfoCommand();
+        this.send(ic);
+    }
+
 
 
     public void finishClient(){
